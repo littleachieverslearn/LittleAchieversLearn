@@ -32,26 +32,24 @@
     }
 
     .logo {
-      width: 190px;
-      height: 190px;
-      margin: 0 auto 20px;
+      width: 210px;
+      height: 210px;
+      margin: 0 auto 22px;
       border-radius: 50%;
-      background: #f3edff;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border: 4px solid #e0d3ff;
-      color: #673ab7;
-      font-size: 30px;
-      font-weight: bold;
-      line-height: 1.1;
+      border: 5px solid #e0d3ff;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
 
     .logo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     h1 {
@@ -124,8 +122,8 @@
       }
 
       .logo {
-        width: 145px;
-        height: 145px;
+        width: 155px;
+        height: 155px;
       }
 
       .subtitle {
@@ -144,11 +142,7 @@
   <main class="home">
 
     <div class="logo">
-      <img 
-        src="./logo.jpeg" 
-        alt="Little Achievers Logo"
-        onerror="this.style.display='none'; this.parentElement.innerHTML='Little<br>Achievers';"
-      >
+      <img src="./logo.jpeg" alt="Little Achievers Logo">
     </div>
 
     <h1>Little Achievers</h1>
