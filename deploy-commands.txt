@@ -1,0 +1,6 @@
+﻿cd C:\Users\user\Desktop\shkolo\shkolo
+
+git status
+git add .
+git commit -m "add little achievers full system"
+git push -u origin main

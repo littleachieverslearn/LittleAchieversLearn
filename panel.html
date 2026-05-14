@@ -1,150 +1,177 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="bg">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Панел | Little Achievers</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ панел | Little Achievers</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f6fb;
       margin: 0;
-      padding: 30px;
-      color: #222;
+      padding: 24px;
+      color: #202124;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1150px;
       margin: auto;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
+    .login,
+    .top,
+    .stats,
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 18px;
+    }
+
     h1 {
-      text-align: center;
-      color: #4f46e5;
-      margin-bottom: 8px;
+      color: #512da8;
+      margin-top: 0;
     }
 
-    .subtitle {
-      text-align: center;
-      color: #555;
-      margin-bottom: 25px;
+    input,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 11px;
+      border-radius: 8px;
+      border: 1px solid #dadce0;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
     }
 
-    .top-bar {
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button,
+    a.btn {
+      background: #673ab7;
+      color: white;
+      border: none;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    button:hover,
+    a.btn:hover {
+      background: #512da8;
+    }
+
+    .secondary {
+      background: white;
+      color: #673ab7;
+      border: 2px solid #673ab7;
+    }
+
+    .secondary:hover {
+      background: #f4edff;
+    }
+
+    .danger {
+      background: #b3261e;
+    }
+
+    .danger:hover {
+      background: #8c1d18;
+    }
+
+    .top-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
     }
 
-    .top-bar a,
-    .top-bar button {
-      background: #4f46e5;
-      color: #fff;
-      padding: 11px 16px;
-      border-radius: 10px;
-      text-decoration: none;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .top-bar a:hover,
-    .top-bar button:hover {
-      background: #3730a3;
-    }
-
-    .search-box {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-      box-sizing: border-box;
-    }
-
-    .stats {
-      background: #ffffff;
-      padding: 15px 18px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      font-weight: bold;
-    }
-
-    .card {
-      background: white;
-      margin-bottom: 20px;
-      padding: 22px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    .search {
+      margin-top: 14px;
     }
 
     .card h2 {
-      margin-top: 0;
-      color: #4f46e5;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 10px;
+      margin: 0 0 8px;
+      color: #512da8;
+    }
+
+    .code {
+      display: inline-block;
+      background: #f3edff;
+      color: #512da8;
+      font-weight: bold;
+      padding: 7px 12px;
+      border-radius: 999px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
     }
 
     .section-title {
-      margin-top: 18px;
-      margin-bottom: 10px;
-      font-size: 18px;
-      color: #333;
       font-weight: bold;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      border-top: 1px solid #eee;
+      padding-top: 14px;
     }
 
     .item {
-      margin: 8px 0;
+      margin: 7px 0;
       line-height: 1.45;
     }
 
     .label {
       font-weight: bold;
-      color: #111;
     }
 
-    .empty,
-    .loading,
-    .error {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      font-weight: bold;
+    .notes {
+      background: #fafafa;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
     }
 
-    .error {
-      color: #b91c1c;
+    .note {
+      border-left: 4px solid #673ab7;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: white;
+      border-radius: 8px;
     }
 
-    .date {
+    .small {
       color: #666;
-      font-size: 14px;
-      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .save-ok {
+      color: green;
+      font-weight: bold;
+      margin-left: 10px;
     }
 
     @media print {
-      body {
-        background: white;
-        padding: 0;
+      .top,
+      .login,
+      .admin-actions {
+        display: none !important;
       }
 
-      .top-bar,
-      .search-box {
-        display: none;
+      body {
+        background: white;
       }
 
       .card {
@@ -157,27 +184,42 @@
 </head>
 
 <body>
-
   <div class="container">
-    <h1>Панел със записани деца</h1>
-    <div class="subtitle">Little Achievers</div>
 
-    <div class="top-bar">
-      <a href="./index.html">+ Нова форма</a>
-      <button onclick="window.print()">Принтирай / Запази PDF</button>
+    <div id="loginBox" class="login">
+      <h1>Админ панел</h1>
+      <p>Въведете парола за достъп:</p>
+      <input type="password" id="passwordInput" placeholder="Парола">
+      <button onclick="checkPassword()">Вход</button>
+      <a class="btn secondary" href="./index.html">Начална страница</a>
     </div>
 
-    <div class="search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Търси по име на дете, родител, телефон, имейл, училище..."
-      />
+    <div id="adminBox" class="hidden">
+      <div class="top">
+        <div class="top-row">
+          <div>
+            <h1>Записани деца | Little Achievers</h1>
+            <div>Тук виждаш всички записани деца и можеш да добавяш статус и бележки.</div>
+          </div>
+
+          <div>
+            <a class="btn secondary" href="./index.html">Начало</a>
+            <a class="btn secondary" href="./form.html">+ Нова форма</a>
+            <button onclick="window.print()">Принтирай / PDF</button>
+            <button class="danger" onclick="logout()">Изход</button>
+          </div>
+        </div>
+
+        <div class="search">
+          <input id="searchInput" type="text" placeholder="Търси по име, родител, телефон, имейл, код...">
+        </div>
+      </div>
+
+      <div class="stats" id="stats">Общо записани деца: 0</div>
+
+      <div id="childrenList">Зареждане...</div>
     </div>
 
-    <div class="stats" id="stats">Общо записани деца: 0</div>
-
-    <div id="childrenList" class="loading">Зареждане...</div>
   </div>
 
   <script type="module">
@@ -187,7 +229,11 @@
       collection,
       getDocs,
       query,
-      orderBy
+      orderBy,
+      doc,
+      updateDoc,
+      arrayUnion,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -203,13 +249,41 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    const loginBox = document.getElementById("loginBox");
+    const adminBox = document.getElementById("adminBox");
     const childrenList = document.getElementById("childrenList");
     const stats = document.getElementById("stats");
     const searchInput = document.getElementById("searchInput");
 
     let allChildren = [];
 
+    window.checkPassword = function() {
+      const password = document.getElementById("passwordInput").value;
+
+      if (password === "00000") {
+        sessionStorage.setItem("adminAccess", "yes");
+        showAdmin();
+      } else {
+        alert("Грешна парола!");
+      }
+    }
+
+    window.logout = function() {
+      sessionStorage.removeItem("adminAccess");
+      location.reload();
+    }
+
+    function showAdmin() {
+      loginBox.classList.add("hidden");
+      adminBox.classList.remove("hidden");
+      loadChildren();
+    }
+
     function safeText(value) {
+      if (Array.isArray(value)) {
+        return value.length ? value.join(", ") : "Няма информация";
+      }
+
       return value && value.toString().trim() !== "" ? value : "Няма информация";
     }
 
@@ -227,14 +301,40 @@
       });
     }
 
-    function renderChildren(children) {
-      childrenList.className = "";
-      childrenList.innerHTML = "";
+    function noteDate() {
+      return new Date().toLocaleString("bg-BG", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
+    async function loadChildren() {
+      childrenList.textContent = "Зареждане...";
+
+      const q = query(collection(db, "children"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+
+      allChildren = [];
+
+      snapshot.forEach((docSnap) => {
+        allChildren.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
+      renderChildren(allChildren);
+    }
+
+    function renderChildren(children) {
+      childrenList.innerHTML = "";
       stats.textContent = "Общо записани деца: " + allChildren.length;
 
-      if (children.length === 0) {
-        childrenList.innerHTML = '<div class="empty">Няма намерени записи.</div>';
+      if (!children.length) {
+        childrenList.innerHTML = "<div class='card'>Няма намерени записи.</div>";
         return;
       }
 
@@ -242,88 +342,127 @@
         const card = document.createElement("div");
         card.className = "card";
 
+        const notes = Array.isArray(child.adminNotes) ? child.adminNotes : [];
+
         card.innerHTML = `
           <h2>${index + 1}. ${safeText(child.childName)}</h2>
-
-          <div class="date">
-            Записано на: ${formatDate(child.createdAt)}
-          </div>
+          <div class="code">Код: ${safeText(child.childCode)}</div>
+          <div class="small">Записано на: ${formatDate(child.createdAt)}</div>
 
           <div class="section-title">Данни за детето</div>
-          <div class="item"><span class="label">Име и фамилия на детето:</span> ${safeText(child.childName)}</div>
-          <div class="item"><span class="label">Възраст:</span> ${safeText(child.age)}</div>
-          <div class="item"><span class="label">Клас / група:</span> ${safeText(child.group)}</div>
-          <div class="item"><span class="label">Училище:</span> ${safeText(child.school)}</div>
+          <div class="item"><span class="label">Име:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">Дата на раждане:</span> ${safeText(child.birthDate)}</div>
+          <div class="item"><span class="label">Училище и клас:</span> ${safeText(child.schoolAndClass)}</div>
+          <div class="item"><span class="label">Алергии / специфични нужди:</span> ${safeText(child.allergiesNeeds)}</div>
 
           <div class="section-title">Данни за родител</div>
-          <div class="item"><span class="label">Име и фамилия на родител:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Родител:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Месторабота:</span> ${safeText(child.parentWorkplace)}</div>
           <div class="item"><span class="label">Телефон:</span> ${safeText(child.phone)}</div>
           <div class="item"><span class="label">Имейл:</span> ${safeText(child.email)}</div>
+          <div class="item"><span class="label">Адрес:</span> ${safeText(child.address)}</div>
 
-          <div class="section-title">Посещения</div>
-          <div class="item"><span class="label">Желани дни за посещение:</span> ${safeText(child.days)}</div>
-          <div class="item"><span class="label">Желан час:</span> ${safeText(child.time)}</div>
-          <div class="item"><span class="label">Тип посещение:</span> ${safeText(child.visitType)}</div>
+          <div class="section-title">Участие</div>
+          <div class="item"><span class="label">Форма:</span> ${safeText(child.participationForm)}</div>
+          <div class="item"><span class="label">Период:</span> ${safeText(child.period)}</div>
+          <div class="item"><span class="label">Такса:</span> ${safeText(child.programFee)}</div>
+          <div class="item"><span class="label">Допълнителна информация:</span> ${safeText(child.additionalInfo)}</div>
 
-          <div class="section-title">Важна информация</div>
-          <div class="item"><span class="label">Алергии:</span> ${safeText(child.allergies)}</div>
-          <div class="item"><span class="label">Медицински особености:</span> ${safeText(child.medicalInfo)}</div>
-          <div class="item"><span class="label">Специални нужди / важна информация:</span> ${safeText(child.specialInfo)}</div>
-          <div class="item"><span class="label">Коментар от родител:</span> ${safeText(child.parentComment)}</div>
+          <div class="section-title">Статус към родителя</div>
+          <textarea id="status-${child.id}" placeholder="Напиши статус, който родителят да вижда...">${child.statusText || ""}</textarea>
+          <button onclick="saveStatus('${child.id}')">Запомни статус</button>
+          <span id="status-ok-${child.id}" class="save-ok"></span>
 
-          <div class="section-title">Съгласия</div>
-          <div class="item"><span class="label">GDPR съгласие:</span> ${safeText(child.gdprConsent)}</div>
-          <div class="item"><span class="label">Съгласие за снимки / видеа:</span> ${safeText(child.photoConsent)}</div>
-          <div class="item"><span class="label">Потвърдена вярна информация:</span> ${safeText(child.confirmInfo)}</div>
+          <div class="section-title">Нова бележка към това дете</div>
+          <textarea id="note-${child.id}" placeholder="Напиши бележка към родителя..."></textarea>
+          <button onclick="addNote('${child.id}')">Запомни бележка</button>
+          <span id="note-ok-${child.id}" class="save-ok"></span>
+
+          <div class="notes">
+            <b>Запазени бележки:</b>
+            ${
+              notes.length
+              ? notes.map(n => `
+                <div class="note">
+                  <div>${safeText(n.text)}</div>
+                  <div class="small">${safeText(n.date)}</div>
+                </div>
+              `).join("")
+              : "<div class='small'>Все още няма бележки.</div>"
+            }
+          </div>
+
+          <div class="admin-actions">
+            <button class="secondary" onclick="copyParentLink('${child.childCode || ""}')">Копирай линк за родителя</button>
+          </div>
         `;
 
         childrenList.appendChild(card);
       });
     }
 
-    async function loadChildren() {
-      try {
-        childrenList.className = "loading";
-        childrenList.textContent = "Зареждане...";
+    window.addNote = async function(childId) {
+      const textarea = document.getElementById("note-" + childId);
+      const ok = document.getElementById("note-ok-" + childId);
+      const text = textarea.value.trim();
 
-        const q = query(collection(db, "children"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
-
-        allChildren = [];
-
-        snapshot.forEach((doc) => {
-          allChildren.push({
-            id: doc.id,
-            ...doc.data()
-          });
-        });
-
-        renderChildren(allChildren);
-      } catch (error) {
-        console.error("Firebase error:", error);
-        childrenList.className = "error";
-        childrenList.textContent = "Грешка при зареждане. Провери дали Firestore Database е създадена и дали Rules са публикувани.";
+      if (!text) {
+        alert("Напиши бележка.");
+        return;
       }
+
+      await updateDoc(doc(db, "children", childId), {
+        adminNotes: arrayUnion({
+          text: text,
+          date: noteDate()
+        }),
+        updatedAt: serverTimestamp()
+      });
+
+      ok.textContent = "Запазено!";
+      textarea.value = "";
+
+      await loadChildren();
     }
 
-    searchInput.addEventListener("input", function () {
+    window.saveStatus = async function(childId) {
+      const textarea = document.getElementById("status-" + childId);
+      const ok = document.getElementById("status-ok-" + childId);
+
+      await updateDoc(doc(db, "children", childId), {
+        statusText: textarea.value.trim(),
+        updatedAt: serverTimestamp()
+      });
+
+      ok.textContent = "Запазено!";
+      setTimeout(() => ok.textContent = "", 2000);
+    }
+
+    window.copyParentLink = async function(code) {
+      const url = window.location.origin + "/status.html?code=" + encodeURIComponent(code);
+      await navigator.clipboard.writeText(url);
+      alert("Линкът е копиран: " + url);
+    }
+
+    searchInput.addEventListener("input", function() {
       const text = searchInput.value.toLowerCase().trim();
 
-      const filtered = allChildren.filter((child) => {
+      const filtered = allChildren.filter(child => {
         return (
           (child.childName || "").toLowerCase().includes(text) ||
           (child.parentName || "").toLowerCase().includes(text) ||
           (child.phone || "").toLowerCase().includes(text) ||
           (child.email || "").toLowerCase().includes(text) ||
-          (child.school || "").toLowerCase().includes(text)
+          (child.childCode || "").toLowerCase().includes(text)
         );
       });
 
       renderChildren(filtered);
     });
 
-    loadChildren();
+    if (sessionStorage.getItem("adminAccess") === "yes") {
+      showAdmin();
+    }
   </script>
-
 </body>
 </html>

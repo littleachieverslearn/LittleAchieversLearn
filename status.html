@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Проверка с код | Little Achievers</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      color: #202124;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .box,
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 18px;
+    }
+
+    .box {
+      border-top: 10px solid #673ab7;
+      text-align: center;
+    }
+
+    h1 {
+      color: #512da8;
+      margin-top: 0;
+    }
+
+    input {
+      width: 100%;
+      max-width: 260px;
+      padding: 14px;
+      border: 1px solid #dadce0;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 5px;
+      box-sizing: border-box;
+      margin: 10px 0;
+    }
+
+    button,
+    a.btn {
+      background: #673ab7;
+      color: white;
+      border: none;
+      border-radius: 9px;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin: 6px;
+    }
+
+    button:hover,
+    a.btn:hover {
+      background: #512da8;
+    }
+
+    .secondary {
+      background: white;
+      color: #673ab7;
+      border: 2px solid #673ab7;
+    }
+
+    .secondary:hover {
+      background: #f4edff;
+    }
+
+    .code {
+      display: inline-block;
+      background: #f3edff;
+      color: #512da8;
+      font-weight: bold;
+      padding: 7px 12px;
+      border-radius: 999px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .item {
+      margin: 8px 0;
+      line-height: 1.45;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      border-top: 1px solid #eee;
+      padding-top: 14px;
+    }
+
+    .note {
+      border-left: 4px solid #673ab7;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #fafafa;
+      border-radius: 8px;
+    }
+
+    .small {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .error {
+      color: #b3261e;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #137333;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="box">
+      <h1>Проверка с 4-цифрен код</h1>
+      <p>Въведете кода, който получихте след записване.</p>
+
+      <input id="codeInput" type="text" maxlength="4" placeholder="0000">
+
+      <br>
+
+      <button onclick="findChild()">Провери</button>
+      <button class="secondary" onclick="rememberCode()">Запомни</button>
+      <a class="btn secondary" href="./index.html">Начало</a>
+
+      <div id="message"></div>
+    </div>
+
+    <div id="result"></div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoXPhysPJEfeTOFnJUK3ZHR0x66up3L6E",
+      authDomain: "littleachievers.firebaseapp.com",
+      projectId: "littleachievers",
+      storageBucket: "littleachievers.firebasestorage.app",
+      messagingSenderId: "811415959587",
+      appId: "1:811415959587:web:b6c9911ba8e416ab685996",
+      measurementId: "G-YLDS0L7EMF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const codeInput = document.getElementById("codeInput");
+    const result = document.getElementById("result");
+    const message = document.getElementById("message");
+
+    function safeText(value) {
+      if (Array.isArray(value)) {
+        return value.length ? value.join(", ") : "Няма информация";
+      }
+
+      return value && value.toString().trim() !== "" ? value : "Няма информация";
+    }
+
+    function getCodeFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("code");
+    }
+
+    window.rememberCode = function() {
+      const code = codeInput.value.trim();
+
+      if (code.length === 4) {
+        localStorage.setItem("littleAchieversChildCode", code);
+        message.innerHTML = "<p class='success'>Кодът е запомнен на това устройство.</p>";
+      } else {
+        message.innerHTML = "<p class='error'>Въведете 4-цифрен код.</p>";
+      }
+    }
+
+    window.findChild = async function() {
+      const code = codeInput.value.trim();
+
+      result.innerHTML = "";
+      message.innerHTML = "";
+
+      if (code.length !== 4) {
+        message.innerHTML = "<p class='error'>Въведете 4-цифрен код.</p>";
+        return;
+      }
+
+      const q = query(collection(db, "children"), where("childCode", "==", code));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        result.innerHTML = "<div class='card error'>Няма намерен запис с този код.</div>";
+        return;
+      }
+
+      let child = null;
+
+      snapshot.forEach(doc => {
+        child = {
+          id: doc.id,
+          ...doc.data()
+        };
+      });
+
+      const notes = Array.isArray(child.adminNotes) ? child.adminNotes : [];
+
+      result.innerHTML = `
+        <div class="card">
+          <h1>${safeText(child.childName)}</h1>
+          <div class="code">Код: ${safeText(child.childCode)}</div>
+
+          <div class="section-title">Статус / съобщение</div>
+          <div class="item">${safeText(child.statusText)}</div>
+
+          <div class="section-title">Основна информация</div>
+          <div class="item"><span class="label">Дете:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">Родител:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Форма на участие:</span> ${safeText(child.participationForm)}</div>
+          <div class="item"><span class="label">Период:</span> ${safeText(child.period)}</div>
+          <div class="item"><span class="label">Такса:</span> ${safeText(child.programFee)}</div>
+
+          <div class="section-title">Бележки от Little Achievers</div>
+          ${
+            notes.length
+              ? notes.map(n => `
+                <div class="note">
+                  <div>${safeText(n.text)}</div>
+                  <div class="small">${safeText(n.date)}</div>
+                </div>
+              `).join("")
+              : "<div class='small'>Все още няма добавени бележки.</div>"
+          }
+        </div>
+      `;
+
+      localStorage.setItem("littleAchieversChildCode", code);
+    }
+
+    const urlCode = getCodeFromUrl();
+    const savedCode = localStorage.getItem("littleAchieversChildCode");
+
+    if (urlCode) {
+      codeInput.value = urlCode;
+      findChild();
+    } else if (savedCode) {
+      codeInput.value = savedCode;
+    }
+  </script>
+</body>
+</html>
