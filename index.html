@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Записване на дете | Little Achievers</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      margin: 0;
+      padding: 30px;
+      color: #222;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: auto;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #4f46e5;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 15px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 15px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 11px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #3730a3;
+    }
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .success {
+      margin-top: 20px;
+      color: green;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error {
+      margin-top: 20px;
+      color: #b91c1c;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 22px;
+    }
+
+    .link a {
+      color: #4f46e5;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .section-title {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid #e5e7eb;
+      color: #333;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 16px;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      margin-top: 4px;
+    }
+
+    .checkbox-row label {
+      margin-top: 0;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Форма за записване на дете</h1>
+    <div class="subtitle">Little Achievers</div>
+
+    <form id="childForm">
+
+      <div class="section-title">Данни за детето</div>
+
+      <label>Име и фамилия на детето *</label>
+      <input type="text" name="childName" required />
+
+      <label>Възраст *</label>
+      <input type="number" name="age" min="1" max="18" required />
+
+      <label>Клас / група</label>
+      <input type="text" name="group" placeholder="Например: 1 клас, 2 клас..." />
+
+      <label>Училище</label>
+      <input type="text" name="school" />
+
+      <div class="section-title">Данни за родител</div>
+
+      <label>Име и фамилия на родител *</label>
+      <input type="text" name="parentName" required />
+
+      <label>Телефон *</label>
+      <input type="tel" name="phone" required />
+
+      <label>Имейл</label>
+      <input type="email" name="email" />
+
+      <div class="section-title">Посещения</div>
+
+      <label>Желани дни за посещение</label>
+      <input type="text" name="days" placeholder="Например: понеделник, сряда, петък" />
+
+      <label>Желан час</label>
+      <input type="text" name="time" placeholder="Например: 14:00 - 17:00" />
+
+      <label>Тип посещение</label>
+      <select name="visitType">
+        <option value="">Избери</option>
+        <option value="Почасово">Почасово</option>
+        <option value="Полудневно">Полудневно</option>
+        <option value="Целодневно">Целодневно</option>
+        <option value="Занималня">Занималня</option>
+        <option value="Друго">Друго</option>
+      </select>
+
+      <div class="section-title">Важна информация</div>
+
+      <label>Има ли алергии?</label>
+      <textarea name="allergies" placeholder="Опишете, ако има алергии"></textarea>
+
+      <label>Има ли медицински особености?</label>
+      <textarea name="medicalInfo" placeholder="Например: лекарства, състояния, ограничения"></textarea>
+
+      <label>Има ли специални нужди или друга важна информация?</label>
+      <textarea name="specialInfo"></textarea>
+
+      <label>Коментар от родител</label>
+      <textarea name="parentComment"></textarea>
+
+      <div class="section-title">Съгласия</div>
+
+      <label>Съгласие за обработка на лични данни *</label>
+      <select name="gdprConsent" required>
+        <option value="">Избери</option>
+        <option value="Да">Да</option>
+        <option value="Не">Не</option>
+      </select>
+
+      <label>Съгласие за снимки / видеа</label>
+      <select name="photoConsent">
+        <option value="">Избери</option>
+        <option value="Да">Да</option>
+        <option value="Не">Не</option>
+      </select>
+
+      <div class="checkbox-row">
+        <input type="checkbox" name="confirmInfo" required />
+        <label>Потвърждавам, че въведената информация е вярна. *</label>
+      </div>
+
+      <button type="submit" id="submitBtn">Изпрати</button>
+    </form>
+
+    <div id="message"></div>
+
+    <div class="link">
+      <a href="./panel.html">Виж записаните деца</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoXPhysPJEfeTOFnJUK3ZHR0x66up3L6E",
+      authDomain: "littleachievers.firebaseapp.com",
+      projectId: "littleachievers",
+      storageBucket: "littleachievers.firebasestorage.app",
+      messagingSenderId: "811415959587",
+      appId: "1:811415959587:web:b6c9911ba8e416ab685996",
+      measurementId: "G-YLDS0L7EMF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("childForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      message.textContent = "";
+      message.className = "";
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Изпращане...";
+
+      const formData = new FormData(form);
+
+      const childData = {
+        childName: formData.get("childName") || "",
+        age: formData.get("age") || "",
+        group: formData.get("group") || "",
+        school: formData.get("school") || "",
+
+        parentName: formData.get("parentName") || "",
+        phone: formData.get("phone") || "",
+        email: formData.get("email") || "",
+
+        days: formData.get("days") || "",
+        time: formData.get("time") || "",
+        visitType: formData.get("visitType") || "",
+
+        allergies: formData.get("allergies") || "",
+        medicalInfo: formData.get("medicalInfo") || "",
+        specialInfo: formData.get("specialInfo") || "",
+        parentComment: formData.get("parentComment") || "",
+
+        gdprConsent: formData.get("gdprConsent") || "",
+        photoConsent: formData.get("photoConsent") || "",
+        confirmInfo: formData.get("confirmInfo") === "on" ? "Да" : "Не",
+
+        createdAt: serverTimestamp()
+      };
+
+      try {
+        await addDoc(collection(db, "children"), childData);
+
+        message.textContent = "Детето е записано успешно!";
+        message.className = "success";
+
+        form.reset();
+      } catch (error) {
+        console.error("Firebase error:", error);
+
+        message.textContent = "Грешка при запис. Провери дали Firestore Database е създадена и дали Rules са публикувани.";
+        message.className = "error";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Изпрати";
+      }
+    });
+  </script>
+
+</body>
+</html>

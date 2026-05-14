@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Панел | Little Achievers</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      margin: 0;
+      padding: 30px;
+      color: #222;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .top-bar a,
+    .top-bar button {
+      background: #4f46e5;
+      color: #fff;
+      padding: 11px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .top-bar a:hover,
+    .top-bar button:hover {
+      background: #3730a3;
+    }
+
+    .search-box {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .stats {
+      background: #ffffff;
+      padding: 15px 18px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      font-weight: bold;
+    }
+
+    .card {
+      background: white;
+      margin-bottom: 20px;
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #4f46e5;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .item {
+      margin: 8px 0;
+      line-height: 1.45;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #111;
+    }
+
+    .empty,
+    .loading,
+    .error {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      font-weight: bold;
+    }
+
+    .error {
+      color: #b91c1c;
+    }
+
+    .date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .top-bar,
+      .search-box {
+        display: none;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Панел със записани деца</h1>
+    <div class="subtitle">Little Achievers</div>
+
+    <div class="top-bar">
+      <a href="./index.html">+ Нова форма</a>
+      <button onclick="window.print()">Принтирай / Запази PDF</button>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Търси по име на дете, родител, телефон, имейл, училище..."
+      />
+    </div>
+
+    <div class="stats" id="stats">Общо записани деца: 0</div>
+
+    <div id="childrenList" class="loading">Зареждане...</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoXPhysPJEfeTOFnJUK3ZHR0x66up3L6E",
+      authDomain: "littleachievers.firebaseapp.com",
+      projectId: "littleachievers",
+      storageBucket: "littleachievers.firebasestorage.app",
+      messagingSenderId: "811415959587",
+      appId: "1:811415959587:web:b6c9911ba8e416ab685996",
+      measurementId: "G-YLDS0L7EMF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const childrenList = document.getElementById("childrenList");
+    const stats = document.getElementById("stats");
+    const searchInput = document.getElementById("searchInput");
+
+    let allChildren = [];
+
+    function safeText(value) {
+      return value && value.toString().trim() !== "" ? value : "Няма информация";
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp || !timestamp.toDate) {
+        return "Няма дата";
+      }
+
+      return timestamp.toDate().toLocaleString("bg-BG", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function renderChildren(children) {
+      childrenList.className = "";
+      childrenList.innerHTML = "";
+
+      stats.textContent = "Общо записани деца: " + allChildren.length;
+
+      if (children.length === 0) {
+        childrenList.innerHTML = '<div class="empty">Няма намерени записи.</div>';
+        return;
+      }
+
+      children.forEach((child, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <h2>${index + 1}. ${safeText(child.childName)}</h2>
+
+          <div class="date">
+            Записано на: ${formatDate(child.createdAt)}
+          </div>
+
+          <div class="section-title">Данни за детето</div>
+          <div class="item"><span class="label">Име и фамилия на детето:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">Възраст:</span> ${safeText(child.age)}</div>
+          <div class="item"><span class="label">Клас / група:</span> ${safeText(child.group)}</div>
+          <div class="item"><span class="label">Училище:</span> ${safeText(child.school)}</div>
+
+          <div class="section-title">Данни за родител</div>
+          <div class="item"><span class="label">Име и фамилия на родител:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Телефон:</span> ${safeText(child.phone)}</div>
+          <div class="item"><span class="label">Имейл:</span> ${safeText(child.email)}</div>
+
+          <div class="section-title">Посещения</div>
+          <div class="item"><span class="label">Желани дни за посещение:</span> ${safeText(child.days)}</div>
+          <div class="item"><span class="label">Желан час:</span> ${safeText(child.time)}</div>
+          <div class="item"><span class="label">Тип посещение:</span> ${safeText(child.visitType)}</div>
+
+          <div class="section-title">Важна информация</div>
+          <div class="item"><span class="label">Алергии:</span> ${safeText(child.allergies)}</div>
+          <div class="item"><span class="label">Медицински особености:</span> ${safeText(child.medicalInfo)}</div>
+          <div class="item"><span class="label">Специални нужди / важна информация:</span> ${safeText(child.specialInfo)}</div>
+          <div class="item"><span class="label">Коментар от родител:</span> ${safeText(child.parentComment)}</div>
+
+          <div class="section-title">Съгласия</div>
+          <div class="item"><span class="label">GDPR съгласие:</span> ${safeText(child.gdprConsent)}</div>
+          <div class="item"><span class="label">Съгласие за снимки / видеа:</span> ${safeText(child.photoConsent)}</div>
+          <div class="item"><span class="label">Потвърдена вярна информация:</span> ${safeText(child.confirmInfo)}</div>
+        `;
+
+        childrenList.appendChild(card);
+      });
+    }
+
+    async function loadChildren() {
+      try {
+        childrenList.className = "loading";
+        childrenList.textContent = "Зареждане...";
+
+        const q = query(collection(db, "children"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+
+        allChildren = [];
+
+        snapshot.forEach((doc) => {
+          allChildren.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+
+        renderChildren(allChildren);
+      } catch (error) {
+        console.error("Firebase error:", error);
+        childrenList.className = "error";
+        childrenList.textContent = "Грешка при зареждане. Провери дали Firestore Database е създадена и дали Rules са публикувани.";
+      }
+    }
+
+    searchInput.addEventListener("input", function () {
+      const text = searchInput.value.toLowerCase().trim();
+
+      const filtered = allChildren.filter((child) => {
+        return (
+          (child.childName || "").toLowerCase().includes(text) ||
+          (child.parentName || "").toLowerCase().includes(text) ||
+          (child.phone || "").toLowerCase().includes(text) ||
+          (child.email || "").toLowerCase().includes(text) ||
+          (child.school || "").toLowerCase().includes(text)
+        );
+      });
+
+      renderChildren(filtered);
+    });
+
+    loadChildren();
+  </script>
+
+</body>
+</html>
