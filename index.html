@@ -180,14 +180,19 @@
       margin: 25px 0;
     }
 
-    .panel-link a {
+    .panel-btn {
+      background: transparent;
       color: #673ab7;
+      border: none;
       font-weight: bold;
-      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 10px;
     }
 
-    .panel-link a:hover {
+    .panel-btn:hover {
       text-decoration: underline;
+      background: transparent;
     }
 
     @media (max-width: 600px) {
@@ -374,7 +379,9 @@
 
       <div class="buttons">
         <button type="submit" id="submitBtn">Изпращане</button>
-        <button type="button" class="clear-btn" onclick="document.getElementById('summerForm').reset()">Изчистване на формуляра</button>
+        <button type="button" class="clear-btn" onclick="document.getElementById('summerForm').reset()">
+          Изчистване на формуляра
+        </button>
       </div>
 
       <div id="message"></div>
@@ -382,7 +389,9 @@
     </form>
 
     <div class="panel-link">
-      <a href="./panel.html">Виж записаните деца</a>
+      <button type="button" class="panel-btn" onclick="openPanelWithPassword()">
+        Виж записаните деца
+      </button>
     </div>
 
   </div>
@@ -478,6 +487,18 @@
         submitBtn.textContent = "Изпращане";
       }
     });
+  </script>
+
+  <script>
+    function openPanelWithPassword() {
+      const password = prompt("Въведете парола за достъп:");
+
+      if (password === "00000") {
+        window.location.href = "./panel.html";
+      } else if (password !== null) {
+        alert("Грешна парола!");
+      }
+    }
   </script>
 
 </body>
