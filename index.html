@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Little Achievers</title>
+
+  <title>Little Achievers | Лятна занималня 2026</title>
+
   <style>
     body {
       margin: 0;
@@ -30,8 +32,8 @@
     }
 
     .logo {
-      width: 170px;
-      height: 170px;
+      width: 190px;
+      height: 190px;
       margin: 0 auto 20px;
       border-radius: 50%;
       background: #f3edff;
@@ -49,7 +51,7 @@
     .logo img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
     }
 
     h1 {
@@ -122,25 +124,43 @@
       }
 
       .logo {
-        width: 135px;
-        height: 135px;
+        width: 145px;
+        height: 145px;
+      }
+
+      .subtitle {
+        font-size: 19px;
+      }
+
+      .text {
+        font-size: 15px;
       }
     }
   </style>
 </head>
 
 <body>
+
   <main class="home">
+
     <div class="logo">
-      <img src="./logo.png" alt="Little Achievers" onerror="this.style.display='none'; this.parentElement.innerHTML='Little<br>Achievers';">
+      <img 
+        src="./logo.jpeg" 
+        alt="Little Achievers Logo"
+        onerror="this.style.display='none'; this.parentElement.innerHTML='Little<br>Achievers';"
+      >
     </div>
 
     <h1>Little Achievers</h1>
-    <div class="subtitle">Лятна занималня 2026</div>
+
+    <div class="subtitle">
+      Лятна занималня 2026
+    </div>
 
     <div class="text">
       Добре дошли! Тук можете да направите предварително записване.
-      След изпращане на формуляра ще получите 4-цифрен код, с който ще можете да следите бележки и информация за детето.
+      След изпращане на формуляра ще получите 4-цифрен код, с който ще можете
+      да следите бележки и информация за детето.
     </div>
 
     <div class="actions">
@@ -150,13 +170,15 @@
     </div>
 
     <div class="small">
-      Ако имаш лого, сложи файл <b>logo.png</b> в същата папка.
+      Админ панелът е защитен с парола.
     </div>
+
   </main>
 
   <script>
     function openPanel() {
       const password = prompt("Въведете парола:");
+
       if (password === "00000") {
         sessionStorage.setItem("adminAccess", "yes");
         window.location.href = "./panel.html";
@@ -165,5 +187,6 @@
       }
     }
   </script>
+
 </body>
 </html>
