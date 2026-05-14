@@ -4,77 +4,139 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Записване на дете | Little Achievers</title>
+  <title>Формуляр за Предварително записване | Little Achievers 2026</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f6fb;
       margin: 0;
-      padding: 30px;
-      color: #222;
+      padding: 20px;
+      color: #202124;
     }
 
     .container {
       max-width: 760px;
-      margin: auto;
+      margin: 0 auto;
+    }
+
+    .header {
       background: #ffffff;
-      padding: 28px;
-      border-radius: 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+      border-top: 10px solid #673ab7;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 8px;
-      color: #4f46e5;
+      margin: 0 0 12px;
+      font-size: 28px;
+      font-weight: 500;
     }
 
     .subtitle {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #555;
-    }
-
-    label {
-      display: block;
-      margin-top: 16px;
+      font-size: 22px;
+      margin-bottom: 18px;
       font-weight: bold;
     }
 
-    input,
+    .info {
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .required-note {
+      color: #d93025;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    .question {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .question-title {
+      font-size: 16px;
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+
+    .required {
+      color: #d93025;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
     textarea,
     select {
       width: 100%;
-      padding: 11px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
+      border: none;
+      border-bottom: 1px solid #dadce0;
+      padding: 12px 4px;
       font-size: 15px;
+      outline: none;
       box-sizing: border-box;
       font-family: Arial, sans-serif;
+      background: transparent;
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 90px;
       resize: vertical;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #673ab7;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 13px 0;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .option input {
+      margin-top: 2px;
+      transform: scale(1.15);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 22px 0;
+      flex-wrap: wrap;
     }
 
     button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 15px;
-      background: #4f46e5;
+      background: #673ab7;
       color: white;
       border: none;
-      border-radius: 11px;
-      font-size: 17px;
-      font-weight: bold;
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-size: 16px;
       cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
-      background: #3730a3;
+      background: #512da8;
     }
 
     button:disabled {
@@ -82,59 +144,68 @@
       cursor: not-allowed;
     }
 
-    .success {
-      margin-top: 20px;
-      color: green;
-      text-align: center;
+    .clear-btn {
+      background: transparent;
+      color: #673ab7;
+      border: none;
+      padding: 13px 8px;
+    }
+
+    .clear-btn:hover {
+      background: #f1eafe;
+    }
+
+    #message {
       font-weight: bold;
+      margin-bottom: 20px;
+      padding: 14px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .success {
+      display: block !important;
+      background: #e6f4ea;
+      color: #137333;
     }
 
     .error {
-      margin-top: 20px;
-      color: #b91c1c;
-      text-align: center;
-      font-weight: bold;
+      display: block !important;
+      background: #fce8e6;
+      color: #c5221f;
     }
 
-    .link {
+    .panel-link {
       text-align: center;
-      margin-top: 22px;
+      margin: 25px 0;
     }
 
-    .link a {
-      color: #4f46e5;
+    .panel-link a {
+      color: #673ab7;
       font-weight: bold;
       text-decoration: none;
     }
 
-    .link a:hover {
+    .panel-link a:hover {
       text-decoration: underline;
     }
 
-    .section-title {
-      margin-top: 28px;
-      padding-top: 18px;
-      border-top: 1px solid #e5e7eb;
-      color: #333;
-      font-size: 20px;
-      font-weight: bold;
-    }
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
 
-    .checkbox-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      margin-top: 16px;
-    }
+      h1 {
+        font-size: 23px;
+      }
 
-    .checkbox-row input {
-      width: auto;
-      margin-top: 4px;
-    }
+      .subtitle {
+        font-size: 19px;
+      }
 
-    .checkbox-row label {
-      margin-top: 0;
-      font-weight: normal;
+      .question {
+        padding: 18px;
+      }
     }
   </style>
 </head>
@@ -142,97 +213,178 @@
 <body>
 
   <div class="container">
-    <h1>Форма за записване на дете</h1>
-    <div class="subtitle">Little Achievers</div>
 
-    <form id="childForm">
+    <div class="header">
+      <h1>Формуляр за Предварително записване</h1>
+      <div class="subtitle">Лятна занималня Little Achievers 2026</div>
 
-      <div class="section-title">Данни за детето</div>
+      <div class="info">
+        ✅ Целодневна форма: 08:30-17:00 ч.<br>
+        ✅ Полудневна форма /преди обяд/ 08:30 – 13:00 ч.<br>
+        ✅ Полудневна форма /след обяд/ 12:30 – 17:00 ч.<br><br>
 
-      <label>Име и фамилия на детето *</label>
-      <input type="text" name="childName" required />
+        ❗️Попълването на формуляра е първата стъпка за записване.
+        Потвърждението се извършва след попълнени декларации за участие
+        и заплащане 40% капаро от избраната програма.<br><br>
 
-      <label>Възраст *</label>
-      <input type="number" name="age" min="1" max="18" required />
-
-      <label>Клас / група</label>
-      <input type="text" name="group" placeholder="Например: 1 клас, 2 клас..." />
-
-      <label>Училище</label>
-      <input type="text" name="school" />
-
-      <div class="section-title">Данни за родител</div>
-
-      <label>Име и фамилия на родител *</label>
-      <input type="text" name="parentName" required />
-
-      <label>Телефон *</label>
-      <input type="tel" name="phone" required />
-
-      <label>Имейл</label>
-      <input type="email" name="email" />
-
-      <div class="section-title">Посещения</div>
-
-      <label>Желани дни за посещение</label>
-      <input type="text" name="days" placeholder="Например: понеделник, сряда, петък" />
-
-      <label>Желан час</label>
-      <input type="text" name="time" placeholder="Например: 14:00 - 17:00" />
-
-      <label>Тип посещение</label>
-      <select name="visitType">
-        <option value="">Избери</option>
-        <option value="Почасово">Почасово</option>
-        <option value="Полудневно">Полудневно</option>
-        <option value="Целодневно">Целодневно</option>
-        <option value="Занималня">Занималня</option>
-        <option value="Друго">Друго</option>
-      </select>
-
-      <div class="section-title">Важна информация</div>
-
-      <label>Има ли алергии?</label>
-      <textarea name="allergies" placeholder="Опишете, ако има алергии"></textarea>
-
-      <label>Има ли медицински особености?</label>
-      <textarea name="medicalInfo" placeholder="Например: лекарства, състояния, ограничения"></textarea>
-
-      <label>Има ли специални нужди или друга важна информация?</label>
-      <textarea name="specialInfo"></textarea>
-
-      <label>Коментар от родител</label>
-      <textarea name="parentComment"></textarea>
-
-      <div class="section-title">Съгласия</div>
-
-      <label>Съгласие за обработка на лични данни *</label>
-      <select name="gdprConsent" required>
-        <option value="">Избери</option>
-        <option value="Да">Да</option>
-        <option value="Не">Не</option>
-      </select>
-
-      <label>Съгласие за снимки / видеа</label>
-      <select name="photoConsent">
-        <option value="">Избери</option>
-        <option value="Да">Да</option>
-        <option value="Не">Не</option>
-      </select>
-
-      <div class="checkbox-row">
-        <input type="checkbox" name="confirmInfo" required />
-        <label>Потвърждавам, че въведената информация е вярна. *</label>
+        * Децата сутрин се водят до 09:00ч., а взимането им ще се извършва до 17:00ч.<br>
+        * Таксите не покриват транспорт или входни такси.
       </div>
 
-      <button type="submit" id="submitBtn">Изпрати</button>
+      <div class="required-note">* Указва задължителен въпрос</div>
+    </div>
+
+    <form id="summerForm">
+
+      <div class="question">
+        <div class="question-title">1. Име и фамилия на детето <span class="required">*</span></div>
+        <input type="text" name="childName" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">2. Дата на раждане <span class="required">*</span></div>
+        <input type="date" name="birthDate" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">3. Училище и клас <span class="required">*</span></div>
+        <input type="text" name="schoolAndClass" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">4. Има ли детето алергии или специфични нужди? <span class="required">*</span></div>
+        <textarea name="allergiesNeeds" required></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-title">5. Име и фамилия на родител/настойник <span class="required">*</span></div>
+        <input type="text" name="parentName" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">6. Месторабота на родителя <span class="required">*</span></div>
+        <input type="text" name="parentWorkplace" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">7. Телефон за връзка <span class="required">*</span></div>
+        <input type="tel" name="phone" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">8. Имейл <span class="required">*</span></div>
+        <input type="email" name="email" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">9. Адрес <span class="required">*</span></div>
+        <input type="text" name="address" required />
+      </div>
+
+      <div class="question">
+        <div class="question-title">10. Изберете форма на участие <span class="required">*</span></div>
+
+        <div class="option">
+          <input type="radio" name="participationForm" value="Целодневна (08:30 – 17:00 ч.)" required />
+          <label>Целодневна (08:30 – 17:00 ч.)</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="participationForm" value="Полудневна (08:30 - 13:00 ч.)" />
+          <label>Полудневна (08:30 - 13:00 ч.)</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="participationForm" value="Полудневна (12:30 – 17:00 ч.)" />
+          <label>Полудневна (12:30 – 17:00 ч.)</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">11. Период на участие <span class="required">*</span></div>
+
+        <div class="option">
+          <input type="checkbox" name="period" value="ЮНИ" />
+          <label>ЮНИ</label>
+        </div>
+
+        <div class="option">
+          <input type="checkbox" name="period" value="ЮЛИ" />
+          <label>ЮЛИ</label>
+        </div>
+
+        <div class="option">
+          <input type="checkbox" name="period" value="АВГУСТ" />
+          <label>АВГУСТ</label>
+        </div>
+
+        <div class="option">
+          <input type="checkbox" name="period" value="СЕПТЕМВРИ - ДО 14.09.2026г." />
+          <label>СЕПТЕМВРИ - ДО 14.09.2026г.</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">12. Допълнителна информация</div>
+        <textarea name="additionalInfo"></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-title">13. Dropdown <span class="required">*</span></div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Целодневна форма (8 часа) – Месечна такса 250 EUR" required />
+          <label>Целодневна форма (8 часа) – Месечна такса 250 EUR</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Целодневна форма (8 часа) – Седмична такса: 100 EUR" />
+          <label>Целодневна форма (8 часа) – Седмична такса: 100 EUR</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Полудневна форма (4 часа) – Месечна такса: 160 EUR" />
+          <label>Полудневна форма (4 часа) – Месечна такса: 160 EUR</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Полудневна форма (4 часа) – Седмична такса: 80 EURO" />
+          <label>Полудневна форма (4 часа) – Седмична такса: 80 EURO</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Еднодневно посещение: 25 EUR" />
+          <label>Еднодневно посещение: 25 EUR</label>
+        </div>
+
+        <div class="option">
+          <input type="radio" name="programFee" value="Посещение за 1 час: 15 EUR" />
+          <label>Посещение за 1 час: 15 EUR</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-title">14. Поставете отметка на всички, които важат.</div>
+
+        <div class="option">
+          <input type="checkbox" name="option1" value="Опция 1" />
+          <label>Опция 1</label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="submit" id="submitBtn">Изпращане</button>
+        <button type="button" class="clear-btn" onclick="document.getElementById('summerForm').reset()">Изчистване на формуляра</button>
+      </div>
+
+      <div id="message"></div>
+
     </form>
 
-    <div id="message"></div>
-
-    <div class="link">
+    <div class="panel-link">
       <a href="./panel.html">Виж записаните деца</a>
     </div>
+
   </div>
 
   <script type="module">
@@ -257,43 +409,54 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const form = document.getElementById("childForm");
+    const form = document.getElementById("summerForm");
     const message = document.getElementById("message");
     const submitBtn = document.getElementById("submitBtn");
 
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+        .map(input => input.value);
+    }
+
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
+
+      const selectedPeriods = getCheckedValues("period");
+
+      if (selectedPeriods.length === 0) {
+        message.textContent = "Моля, изберете поне един период на участие.";
+        message.className = "error";
+        return;
+      }
 
       message.textContent = "";
       message.className = "";
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "Изпращане...";
+      submitBtn.textContent = "Изпраща се...";
 
       const formData = new FormData(form);
 
       const childData = {
+        formTitle: "Формуляр за Предварително записване - Лятна занималня Little Achievers 2026",
+
         childName: formData.get("childName") || "",
-        age: formData.get("age") || "",
-        group: formData.get("group") || "",
-        school: formData.get("school") || "",
+        birthDate: formData.get("birthDate") || "",
+        schoolAndClass: formData.get("schoolAndClass") || "",
+        allergiesNeeds: formData.get("allergiesNeeds") || "",
 
         parentName: formData.get("parentName") || "",
+        parentWorkplace: formData.get("parentWorkplace") || "",
         phone: formData.get("phone") || "",
         email: formData.get("email") || "",
+        address: formData.get("address") || "",
 
-        days: formData.get("days") || "",
-        time: formData.get("time") || "",
-        visitType: formData.get("visitType") || "",
+        participationForm: formData.get("participationForm") || "",
+        period: selectedPeriods,
 
-        allergies: formData.get("allergies") || "",
-        medicalInfo: formData.get("medicalInfo") || "",
-        specialInfo: formData.get("specialInfo") || "",
-        parentComment: formData.get("parentComment") || "",
-
-        gdprConsent: formData.get("gdprConsent") || "",
-        photoConsent: formData.get("photoConsent") || "",
-        confirmInfo: formData.get("confirmInfo") === "on" ? "Да" : "Не",
+        additionalInfo: formData.get("additionalInfo") || "",
+        programFee: formData.get("programFee") || "",
+        option1: formData.get("option1") === "Опция 1" ? "Да" : "Не",
 
         createdAt: serverTimestamp()
       };
@@ -301,18 +464,18 @@
       try {
         await addDoc(collection(db, "children"), childData);
 
-        message.textContent = "Детето е записано успешно!";
+        message.textContent = "Формулярът е изпратен успешно!";
         message.className = "success";
 
         form.reset();
       } catch (error) {
         console.error("Firebase error:", error);
 
-        message.textContent = "Грешка при запис. Провери дали Firestore Database е създадена и дали Rules са публикувани.";
+        message.textContent = "Грешка при запис. Провери Firestore Rules и Firebase проекта.";
         message.className = "error";
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Изпрати";
+        submitBtn.textContent = "Изпращане";
       }
     });
   </script>
