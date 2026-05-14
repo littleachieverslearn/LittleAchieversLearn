@@ -51,6 +51,18 @@
       margin: 10px 0;
     }
 
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #dadce0;
+      min-height: 90px;
+      resize: vertical;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
+
     button,
     a.btn {
       background: #673ab7;
@@ -81,6 +93,14 @@
       background: #f4edff;
     }
 
+    .blue {
+      background: #1a73e8;
+    }
+
+    .blue:hover {
+      background: #1558b0;
+    }
+
     .code {
       display: inline-block;
       background: #f3edff;
@@ -109,12 +129,18 @@
       padding-top: 14px;
     }
 
-    .note {
+    .note,
+    .message {
       border-left: 4px solid #673ab7;
       padding: 10px;
       margin-bottom: 10px;
       background: #fafafa;
       border-radius: 8px;
+    }
+
+    .message {
+      border-left-color: #1a73e8;
+      background: #f3f8ff;
     }
 
     .small {
@@ -130,6 +156,10 @@
     .success {
       color: #137333;
       font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -163,7 +193,11 @@
       collection,
       getDocs,
       query,
-      where
+      where,
+      doc,
+      updateDoc,
+      arrayUnion,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -183,17 +217,38 @@
     const result = document.getElementById("result");
     const message = document.getElementById("message");
 
+    let currentChild = null;
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
     function safeText(value) {
       if (Array.isArray(value)) {
-        return value.length ? value.join(", ") : "Няма информация";
+        return value.length ? escapeHtml(value.join(", ")) : "Няма информация";
       }
 
-      return value && value.toString().trim() !== "" ? value : "Няма информация";
+      return value && value.toString().trim() !== "" ? escapeHtml(value) : "Няма информация";
     }
 
     function getCodeFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get("code");
+    }
+
+    function noteDate() {
+      return new Date().toLocaleString("bg-BG", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
     window.rememberCode = function() {
@@ -212,6 +267,7 @@
 
       result.innerHTML = "";
       message.innerHTML = "";
+      currentChild = null;
 
       if (code.length !== 4) {
         message.innerHTML = "<p class='error'>Въведете 4-цифрен код.</p>";
@@ -226,16 +282,25 @@
         return;
       }
 
-      let child = null;
-
-      snapshot.forEach(doc => {
-        child = {
-          id: doc.id,
-          ...doc.data()
+      snapshot.forEach(docSnap => {
+        currentChild = {
+          id: docSnap.id,
+          ...docSnap.data()
         };
       });
 
+      if (currentChild.deletedAt) {
+        result.innerHTML = "<div class='card error'>Този запис вече не е активен.</div>";
+        return;
+      }
+
+      renderChild(currentChild);
+      localStorage.setItem("littleAchieversChildCode", code);
+    }
+
+    function renderChild(child) {
       const notes = Array.isArray(child.adminNotes) ? child.adminNotes : [];
+      const parentMessages = Array.isArray(child.parentMessages) ? child.parentMessages : [];
 
       result.innerHTML = `
         <div class="card">
@@ -263,10 +328,60 @@
               `).join("")
               : "<div class='small'>Все още няма добавени бележки.</div>"
           }
+
+          <div class="section-title">Въпрос към Little Achievers</div>
+          <textarea id="parentQuestion" placeholder="Напишете въпрос или съобщение към нас..."></textarea>
+          <br>
+          <button class="blue" onclick="sendParentQuestion()">Изпрати въпрос</button>
+          <span id="questionStatus" class="success"></span>
+
+          <div class="section-title">Моите въпроси и отговори</div>
+          ${
+            parentMessages.length
+              ? parentMessages.map(m => `
+                <div class="message">
+                  <div><b>Въпрос:</b> ${safeText(m.text)}</div>
+                  <div class="small">${safeText(m.date)}</div>
+                  <br>
+                  <div><b>Отговор:</b> ${safeText(m.answer || "Все още няма отговор.")}</div>
+                  ${m.answerDate ? `<div class="small">Отговорено на: ${safeText(m.answerDate)}</div>` : ""}
+                </div>
+              `).join("")
+              : "<div class='small'>Все още няма изпратени въпроси.</div>"
+          }
         </div>
       `;
+    }
 
-      localStorage.setItem("littleAchieversChildCode", code);
+    window.sendParentQuestion = async function() {
+      if (!currentChild || !currentChild.id) {
+        alert("Първо въведете валиден код.");
+        return;
+      }
+
+      const textarea = document.getElementById("parentQuestion");
+      const status = document.getElementById("questionStatus");
+      const text = textarea.value.trim();
+
+      if (!text) {
+        alert("Напишете въпрос.");
+        return;
+      }
+
+      await updateDoc(doc(db, "children", currentChild.id), {
+        parentMessages: arrayUnion({
+          text: text,
+          date: noteDate(),
+          answer: "",
+          answerDate: ""
+        }),
+        updatedAt: serverTimestamp()
+      });
+
+      textarea.value = "";
+      status.textContent = "Въпросът е изпратен.";
+
+      await findChild();
     }
 
     const urlCode = getCodeFromUrl();

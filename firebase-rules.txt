@@ -2,8 +2,13 @@
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
     match /children/{document} {
-      allow read, write: if true;
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if true;
     }
+
   }
 }
