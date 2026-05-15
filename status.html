@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>РџСЂРѕРІРµСЂРєР° СЃ РєРѕРґ | Little Achievers</title>
+  <title>&#1055;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072; &#1089; &#1082;&#1086;&#1076; | Little Achievers</title>
 
   <style>
     body {
@@ -157,10 +157,6 @@
       color: #137333;
       font-weight: bold;
     }
-
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 
@@ -168,16 +164,16 @@
   <div class="container">
 
     <div class="box">
-      <h1>РџСЂРѕРІРµСЂРєР° СЃ 4-С†РёС„СЂРµРЅ РєРѕРґ</h1>
-      <p>Р’СЉРІРµРґРµС‚Рµ РєРѕРґР°, РєРѕР№С‚Рѕ РїРѕР»СѓС‡РёС…С‚Рµ СЃР»РµРґ Р·Р°РїРёСЃРІР°РЅРµ.</p>
+      <h1>&#1055;&#1088;&#1086;&#1074;&#1077;&#1088;&#1082;&#1072; &#1089; 4-&#1094;&#1080;&#1092;&#1088;&#1077;&#1085; &#1082;&#1086;&#1076;</h1>
+      <p>&#1042;&#1098;&#1074;&#1077;&#1076;&#1077;&#1090;&#1077; &#1082;&#1086;&#1076;&#1072;, &#1082;&#1086;&#1081;&#1090;&#1086; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1093;&#1090;&#1077; &#1089;&#1083;&#1077;&#1076; &#1079;&#1072;&#1103;&#1074;&#1082;&#1072;&#1090;&#1072;.</p>
 
       <input id="codeInput" type="text" maxlength="4" placeholder="0000">
 
       <br>
 
-      <button onclick="findChild()">РџСЂРѕРІРµСЂРё</button>
-      <button class="secondary" onclick="rememberCode()">Р—Р°РїРѕРјРЅРё</button>
-      <a class="btn secondary" href="./index.html">РќР°С‡Р°Р»Рѕ</a>
+      <button onclick="findChild()">&#1055;&#1088;&#1086;&#1074;&#1077;&#1088;&#1080;</button>
+      <button class="secondary" onclick="rememberCode()">&#1047;&#1072;&#1087;&#1086;&#1084;&#1085;&#1080;</button>
+      <a class="btn secondary" href="./index.html">&#1053;&#1072;&#1095;&#1072;&#1083;&#1086;</a>
 
       <div id="message"></div>
     </div>
@@ -188,6 +184,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
     import {
       getFirestore,
       collection,
@@ -238,10 +235,10 @@
 
     function safeText(value) {
       if (Array.isArray(value)) {
-        return value.length ? escapeHtml(value.join(", ")) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
+        return value.length ? escapeHtml(value.join(", ")) : "\u041D\u044F\u043C\u0430 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F";
       }
 
-      return value && value.toString().trim() !== "" ? escapeHtml(value) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
+      return value && value.toString().trim() !== "" ? escapeHtml(value) : "\u041D\u044F\u043C\u0430 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F";
     }
 
     function getCodeFromUrl() {
@@ -264,11 +261,11 @@
 
       if (code.length === 4) {
         localStorage.setItem("littleAchieversChildCode", code);
-        message.innerHTML = "<p class='success'>РљРѕРґСЉС‚ Рµ Р·Р°РїРѕРјРЅРµРЅ РЅР° С‚РѕРІР° СѓСЃС‚СЂРѕР№СЃС‚РІРѕ.</p>";
+        message.innerHTML = "<p class='success'>\u041A\u043E\u0434\u044A\u0442 \u0435 \u0437\u0430\u043F\u043E\u043C\u043D\u0435\u043D \u043D\u0430 \u0442\u043E\u0432\u0430 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E.</p>";
       } else {
-        message.innerHTML = "<p class='error'>Р’СЉРІРµРґРµС‚Рµ 4-С†РёС„СЂРµРЅ РєРѕРґ.</p>";
+        message.innerHTML = "<p class='error'>\u0412\u044A\u0432\u0435\u0434\u0435\u0442\u0435 4-\u0446\u0438\u0444\u0440\u0435\u043D \u043A\u043E\u0434.</p>";
       }
-    }
+    };
 
     window.findChild = async function() {
       const code = codeInput.value.trim();
@@ -278,7 +275,7 @@
       currentChild = null;
 
       if (code.length !== 4) {
-        message.innerHTML = "<p class='error'>Р’СЉРІРµРґРµС‚Рµ 4-С†РёС„СЂРµРЅ РєРѕРґ.</p>";
+        message.innerHTML = "<p class='error'>\u0412\u044A\u0432\u0435\u0434\u0435\u0442\u0435 4-\u0446\u0438\u0444\u0440\u0435\u043D \u043A\u043E\u0434.</p>";
         return;
       }
 
@@ -286,7 +283,7 @@
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        result.innerHTML = "<div class='card error'>РќСЏРјР° РЅР°РјРµСЂРµРЅ Р·Р°РїРёСЃ СЃ С‚РѕР·Рё РєРѕРґ.</div>";
+        result.innerHTML = "<div class='card error'>\u041D\u044F\u043C\u0430 \u043D\u0430\u043C\u0435\u0440\u0435\u043D \u0437\u0430\u043F\u0438\u0441 \u0441 \u0442\u043E\u0437\u0438 \u043A\u043E\u0434.</div>";
         return;
       }
 
@@ -298,13 +295,13 @@
       });
 
       if (currentChild.deletedAt) {
-        result.innerHTML = "<div class='card error'>РўРѕР·Рё Р·Р°РїРёСЃ РІРµС‡Рµ РЅРµ Рµ Р°РєС‚РёРІРµРЅ.</div>";
+        result.innerHTML = "<div class='card error'>\u0422\u043E\u0437\u0438 \u0437\u0430\u043F\u0438\u0441 \u0432\u0435\u0447\u0435 \u043D\u0435 \u0435 \u0430\u043A\u0442\u0438\u0432\u0435\u043D.</div>";
         return;
       }
 
       renderChild(currentChild);
       localStorage.setItem("littleAchieversChildCode", code);
-    }
+    };
 
     function renderChild(child) {
       const notes = Array.isArray(child.adminNotes) ? child.adminNotes : [];
@@ -313,55 +310,55 @@
       result.innerHTML = `
         <div class="card">
           <h1>${safeText(child.childName)}</h1>
-          <div class="code">РљРѕРґ: ${safeText(child.childCode)}</div>
+          <div class="code">\u041A\u043E\u0434: ${safeText(child.childCode)}</div>
 
-          <div class="section-title">РЎС‚Р°С‚СѓСЃ / СЃСЉРѕР±С‰РµРЅРёРµ</div>
+          <div class="section-title">\u0421\u0442\u0430\u0442\u0443\u0441 / \u0441\u044A\u043E\u0431\u0449\u0435\u043D\u0438\u0435</div>
           <div class="item">${safeText(child.statusText)}</div>
 
-          <div class="section-title">РР·РІРµСЃС‚РёСЏ</div>
+          <div class="section-title">\u0418\u0437\u0432\u0435\u0441\u0442\u0438\u044F</div>
           <button class="blue" onclick="enableParentNotifications()">
-            Р Р°Р·СЂРµС€Рё РёР·РІРµСЃС‚РёСЏ Р·Р° С‚РѕРІР° РґРµС‚Рµ
+            \u0420\u0430\u0437\u0440\u0435\u0448\u0438 \u0438\u0437\u0432\u0435\u0441\u0442\u0438\u044F \u0437\u0430 \u0442\u043E\u0432\u0430 \u0434\u0435\u0442\u0435
           </button>
           <div id="parentNotifyStatus" class="small"></div>
 
-          <div class="section-title">РћСЃРЅРѕРІРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ</div>
-          <div class="item"><span class="label">Р”РµС‚Рµ:</span> ${safeText(child.childName)}</div>
-          <div class="item"><span class="label">Р РѕРґРёС‚РµР»:</span> ${safeText(child.parentName)}</div>
-          <div class="item"><span class="label">Р¤РѕСЂРјР° РЅР° СѓС‡Р°СЃС‚РёРµ:</span> ${safeText(child.participationForm)}</div>
-          <div class="item"><span class="label">РџРµСЂРёРѕРґ:</span> ${safeText(child.period)}</div>
-          <div class="item"><span class="label">РўР°РєСЃР°:</span> ${safeText(child.programFee)}</div>
+          <div class="section-title">\u041E\u0441\u043D\u043E\u0432\u043D\u0430 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F</div>
+          <div class="item"><span class="label">\u0414\u0435\u0442\u0435:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">\u0424\u043E\u0440\u043C\u0430:</span> ${safeText(child.participationForm)}</div>
+          <div class="item"><span class="label">\u041F\u0435\u0440\u0438\u043E\u0434:</span> ${safeText(child.period)}</div>
+          <div class="item"><span class="label">\u0422\u0430\u043A\u0441\u0430:</span> ${safeText(child.programFee)}</div>
 
-          <div class="section-title">Р‘РµР»РµР¶РєРё РѕС‚ Little Achievers</div>
+          <div class="section-title">\u0411\u0435\u043B\u0435\u0436\u043A\u0438 \u043E\u0442 Little Achievers</div>
           ${
             notes.length
               ? notes.map(n => `
                 <div class="note">
                   <div>${safeText(n.text)}</div>
+                  ${n.fileUrl ? `<div><a href="${escapeHtml(n.fileUrl)}" target="_blank">\u041E\u0442\u0432\u043E\u0440\u0438 \u043F\u0440\u0438\u043A\u0430\u0447\u0435\u043D \u043B\u0438\u043D\u043A</a></div>` : ""}
                   <div class="small">${safeText(n.date)}</div>
                 </div>
               `).join("")
-              : "<div class='small'>Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РґРѕР±Р°РІРµРЅРё Р±РµР»РµР¶РєРё.</div>"
+              : "<div class='small'>\u0412\u0441\u0435 \u043E\u0449\u0435 \u043D\u044F\u043C\u0430 \u0434\u043E\u0431\u0430\u0432\u0435\u043D\u0438 \u0431\u0435\u043B\u0435\u0436\u043A\u0438.</div>"
           }
 
-          <div class="section-title">Р’СЉРїСЂРѕСЃ РєСЉРј Little Achievers</div>
-          <textarea id="parentQuestion" placeholder="РќР°РїРёС€РµС‚Рµ РІСЉРїСЂРѕСЃ РёР»Рё СЃСЉРѕР±С‰РµРЅРёРµ РєСЉРј РЅР°СЃ..."></textarea>
+          <div class="section-title">\u0412\u044A\u043F\u0440\u043E\u0441 \u043A\u044A\u043C Little Achievers</div>
+          <textarea id="parentQuestion" placeholder="\u041D\u0430\u043F\u0438\u0448\u0435\u0442\u0435 \u0432\u044A\u043F\u0440\u043E\u0441 \u0438\u043B\u0438 \u0441\u044A\u043E\u0431\u0449\u0435\u043D\u0438\u0435 \u043A\u044A\u043C \u043D\u0430\u0441..."></textarea>
           <br>
-          <button class="blue" onclick="sendParentQuestion()">РР·РїСЂР°С‚Рё РІСЉРїСЂРѕСЃ</button>
+          <button class="blue" onclick="sendParentQuestion()">\u0418\u0437\u043F\u0440\u0430\u0442\u0438 \u0432\u044A\u043F\u0440\u043E\u0441</button>
           <span id="questionStatus" class="success"></span>
 
-          <div class="section-title">РњРѕРёС‚Рµ РІСЉРїСЂРѕСЃРё Рё РѕС‚РіРѕРІРѕСЂРё</div>
+          <div class="section-title">\u041C\u043E\u0438\u0442\u0435 \u0432\u044A\u043F\u0440\u043E\u0441\u0438 \u0438 \u043E\u0442\u0433\u043E\u0432\u043E\u0440\u0438</div>
           ${
             parentMessages.length
               ? parentMessages.map(m => `
                 <div class="message">
-                  <div><b>Р’СЉРїСЂРѕСЃ:</b> ${safeText(m.text)}</div>
+                  <div><b>\u0412\u044A\u043F\u0440\u043E\u0441:</b> ${safeText(m.text)}</div>
                   <div class="small">${safeText(m.date)}</div>
                   <br>
-                  <div><b>РћС‚РіРѕРІРѕСЂ:</b> ${safeText(m.answer || "Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РѕС‚РіРѕРІРѕСЂ.")}</div>
-                  ${m.answerDate ? `<div class="small">РћС‚РіРѕРІРѕСЂРµРЅРѕ РЅР°: ${safeText(m.answerDate)}</div>` : ""}
+                  <div><b>\u041E\u0442\u0433\u043E\u0432\u043E\u0440:</b> ${safeText(m.answer || "\u0412\u0441\u0435 \u043E\u0449\u0435 \u043D\u044F\u043C\u0430 \u043E\u0442\u0433\u043E\u0432\u043E\u0440.")}</div>
+                  ${m.answerDate ? `<div class="small">\u041E\u0442\u0433\u043E\u0432\u043E\u0440\u0435\u043D\u043E \u043D\u0430: ${safeText(m.answerDate)}</div>` : ""}
                 </div>
               `).join("")
-              : "<div class='small'>Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РёР·РїСЂР°С‚РµРЅРё РІСЉРїСЂРѕСЃРё.</div>"
+              : "<div class='small'>\u0412\u0441\u0435 \u043E\u0449\u0435 \u043D\u044F\u043C\u0430 \u0438\u0437\u043F\u0440\u0430\u0442\u0435\u043D\u0438 \u0432\u044A\u043F\u0440\u043E\u0441\u0438.</div>"
           }
         </div>
       `;
@@ -369,7 +366,7 @@
 
     window.sendParentQuestion = async function() {
       if (!currentChild || !currentChild.id) {
-        alert("РџСЉСЂРІРѕ РІСЉРІРµРґРµС‚Рµ РІР°Р»РёРґРµРЅ РєРѕРґ.");
+        alert("\u041F\u044A\u0440\u0432\u043E \u0432\u044A\u0432\u0435\u0434\u0435\u0442\u0435 \u0432\u0430\u043B\u0438\u0434\u0435\u043D \u043A\u043E\u0434.");
         return;
       }
 
@@ -378,7 +375,7 @@
       const text = textarea.value.trim();
 
       if (!text) {
-        alert("РќР°РїРёС€РµС‚Рµ РІСЉРїСЂРѕСЃ.");
+        alert("\u041D\u0430\u043F\u0438\u0448\u0435\u0442\u0435 \u0432\u044A\u043F\u0440\u043E\u0441.");
         return;
       }
 
@@ -399,26 +396,26 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            title: "Нов въпрос от родител",
-            body: `${currentChild.childName || "Дете"}: ${text}`,
+            title: "\u041D\u043E\u0432 \u0432\u044A\u043F\u0440\u043E\u0441 \u043E\u0442 \u0440\u043E\u0434\u0438\u0442\u0435\u043B",
+            body: `${currentChild.childName || "\u0414\u0435\u0442\u0435"}: ${text}`,
             childName: currentChild.childName || "",
             birthDate: currentChild.birthDate || "",
             childCode: currentChild.childCode || ""
           })
         });
       } catch (notifyError) {
-        console.error("Грешка при известие към админ:", notifyError);
+        console.error("Admin notification error:", notifyError);
       }
 
       textarea.value = "";
-      status.textContent = "Р’СЉРїСЂРѕСЃСЉС‚ Рµ РёР·РїСЂР°С‚РµРЅ.";
+      status.textContent = "\u0412\u044A\u043F\u0440\u043E\u0441\u044A\u0442 \u0435 \u0438\u0437\u043F\u0440\u0430\u0442\u0435\u043D.";
 
       await findChild();
-    }
+    };
 
     window.enableParentNotifications = async function() {
       if (!currentChild || !currentChild.id) {
-        alert("РџСЉСЂРІРѕ РІСЉРІРµРґРµС‚Рµ РІР°Р»РёРґРµРЅ РєРѕРґ.");
+        alert("\u041F\u044A\u0440\u0432\u043E \u0432\u044A\u0432\u0435\u0434\u0435\u0442\u0435 \u0432\u0430\u043B\u0438\u0434\u0435\u043D \u043A\u043E\u0434.");
         return;
       }
 
@@ -426,30 +423,32 @@
 
       try {
         if (!("Notification" in window)) {
-          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° РёР·РІРµСЃС‚РёСЏ.";
+          status.textContent = "\u0422\u043E\u0437\u0438 \u0431\u0440\u0430\u0443\u0437\u044A\u0440 \u043D\u0435 \u043F\u043E\u0434\u0434\u044A\u0440\u0436\u0430 \u0438\u0437\u0432\u0435\u0441\u0442\u0438\u044F.";
           return;
         }
 
         if (!("serviceWorker" in navigator)) {
-          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° service worker РёР·РІРµСЃС‚РёСЏ.";
+          status.textContent = "\u0422\u043E\u0437\u0438 \u0431\u0440\u0430\u0443\u0437\u044A\u0440 \u043D\u0435 \u043F\u043E\u0434\u0434\u044A\u0440\u0436\u0430 service worker.";
           return;
         }
 
         const supported = await isSupported();
 
         if (!supported) {
-          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° Firebase push РёР·РІРµСЃС‚РёСЏ.";
+          status.textContent = "\u0422\u043E\u0437\u0438 \u0431\u0440\u0430\u0443\u0437\u044A\u0440 \u043D\u0435 \u043F\u043E\u0434\u0434\u044A\u0440\u0436\u0430 Firebase push.";
           return;
         }
 
         const permission = await Notification.requestPermission();
 
         if (permission !== "granted") {
-          status.textContent = "РР·РІРµСЃС‚РёСЏС‚Р° РЅРµ СЃР° СЂР°Р·СЂРµС€РµРЅРё.";
+          status.textContent = "\u0418\u0437\u0432\u0435\u0441\u0442\u0438\u044F\u0442\u0430 \u043D\u0435 \u0441\u0430 \u0440\u0430\u0437\u0440\u0435\u0448\u0435\u043D\u0438.";
           return;
         }
 
-        const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+        const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+          scope: "/"
+        });
 
         const messaging = getMessaging(app);
 
@@ -459,7 +458,7 @@
         });
 
         if (!token) {
-          status.textContent = "РќРµ Р±РµС€Рµ РїРѕР»СѓС‡РµРЅ notification token.";
+          status.textContent = "\u041D\u0435 \u0431\u0435\u0448\u0435 \u043F\u043E\u043B\u0443\u0447\u0435\u043D notification token.";
           return;
         }
 
@@ -468,10 +467,10 @@
           updatedAt: serverTimestamp()
         });
 
-        status.textContent = "Р“РѕС‚РѕРІРѕ! Р©Рµ РїРѕР»СѓС‡Р°РІР°С‚Рµ РёР·РІРµСЃС‚РёСЏ Р·Р° С‚РѕРІР° РґРµС‚Рµ.";
+        status.textContent = "\u0413\u043E\u0442\u043E\u0432\u043E! \u0429\u0435 \u043F\u043E\u043B\u0443\u0447\u0430\u0432\u0430\u0442\u0435 \u0438\u0437\u0432\u0435\u0441\u0442\u0438\u044F \u0437\u0430 \u0442\u043E\u0432\u0430 \u0434\u0435\u0442\u0435.";
       } catch (error) {
         console.error(error);
-        status.textContent = "Р“СЂРµС€РєР° РїСЂРё РІРєР»СЋС‡РІР°РЅРµ РЅР° РёР·РІРµСЃС‚РёСЏС‚Р°.";
+        status.textContent = "\u0413\u0440\u0435\u0448\u043A\u0430: " + (error.message || String(error));
       }
     };
 
