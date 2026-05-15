@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
@@ -200,6 +200,12 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    import {
+      getMessaging,
+      getToken,
+      isSupported
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCoXPhysPJEfeTOFnJUK3ZHR0x66up3L6E",
       authDomain: "littleachievers.firebaseapp.com",
@@ -209,6 +215,8 @@
       appId: "1:811415959587:web:b6c9911ba8e416ab685996",
       measurementId: "G-YLDS0L7EMF"
     };
+
+    const vapidKey = "BNpyVpBvIkOYyPOo7i2UbMolAkMxpgzBVs1deLgYBt2BH5D2HYrE3kOVH7TJSI3Oeh3fqSU9lIeMDvQfOYhA8k0";
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -310,6 +318,12 @@
           <div class="section-title">Статус / съобщение</div>
           <div class="item">${safeText(child.statusText)}</div>
 
+          <div class="section-title">Известия</div>
+          <button class="blue" onclick="enableParentNotifications()">
+            Разреши известия за това дете
+          </button>
+          <div id="parentNotifyStatus" class="small"></div>
+
           <div class="section-title">Основна информация</div>
           <div class="item"><span class="label">Дете:</span> ${safeText(child.childName)}</div>
           <div class="item"><span class="label">Родител:</span> ${safeText(child.parentName)}</div>
@@ -383,6 +397,65 @@
 
       await findChild();
     }
+
+    window.enableParentNotifications = async function() {
+      if (!currentChild || !currentChild.id) {
+        alert("Първо въведете валиден код.");
+        return;
+      }
+
+      const status = document.getElementById("parentNotifyStatus");
+
+      try {
+        if (!("Notification" in window)) {
+          status.textContent = "Този браузър не поддържа известия.";
+          return;
+        }
+
+        if (!("serviceWorker" in navigator)) {
+          status.textContent = "Този браузър не поддържа service worker известия.";
+          return;
+        }
+
+        const supported = await isSupported();
+
+        if (!supported) {
+          status.textContent = "Този браузър не поддържа Firebase push известия.";
+          return;
+        }
+
+        const permission = await Notification.requestPermission();
+
+        if (permission !== "granted") {
+          status.textContent = "Известията не са разрешени.";
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+
+        const messaging = getMessaging(app);
+
+        const token = await getToken(messaging, {
+          vapidKey: vapidKey,
+          serviceWorkerRegistration: registration
+        });
+
+        if (!token) {
+          status.textContent = "Не беше получен notification token.";
+          return;
+        }
+
+        await updateDoc(doc(db, "children", currentChild.id), {
+          parentNotificationTokens: arrayUnion(token),
+          updatedAt: serverTimestamp()
+        });
+
+        status.textContent = "Готово! Ще получавате известия за това дете.";
+      } catch (error) {
+        console.error(error);
+        status.textContent = "Грешка при включване на известията.";
+      }
+    };
 
     const urlCode = getCodeFromUrl();
     const savedCode = localStorage.getItem("littleAchieversChildCode");

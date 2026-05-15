@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
@@ -584,6 +584,22 @@
                 <button onclick="addNote('${child.id}')">Запомни бележка</button>
                 <span id="note-ok-${child.id}" class="save-ok"></span>
 
+                <div class="section-title">Съобщение към родителя</div>
+                <textarea id="parent-msg-${child.id}" placeholder="Напиши съобщение към родителя..."></textarea>
+
+                <input
+                  id="parent-file-${child.id}"
+                  type="text"
+                  placeholder="Линк към файл, снимка, Word, Excel или клип /по желание/"
+                  style="margin-top:8px;"
+                >
+
+                <button class="blue" onclick="sendMessageToParent('${child.id}')">
+                  Изпрати съобщение към родителя
+                </button>
+
+                <span id="parent-msg-ok-${child.id}" class="save-ok"></span>
+
                 <div class="notes">
                   <b>Запазени бележки:</b>
                   ${
@@ -592,6 +608,7 @@
                       <div class="note">
                         <button class="x-btn" title="Изтрий бележката" onclick="deleteNote('${child.id}', ${noteIndex})">×</button>
                         <div>${safeText(n.text)}</div>
+                        ${n.fileUrl ? `<div><a href="${escapeHtml(n.fileUrl)}" target="_blank">Отвори прикачен линк</a></div>` : ""}
                         <div class="small">${safeText(n.date)}</div>
                         <div style="clear:both;"></div>
                       </div>
@@ -747,6 +764,63 @@
       await navigator.clipboard.writeText(url);
       alert("Линкът е копиран: " + url);
     }
+
+    window.sendMessageToParent = async function(childId) {
+      const child = allChildren.find(c => c.id === childId);
+
+      if (!child) {
+        alert("Не е намерено дете.");
+        return;
+      }
+
+      const textarea = document.getElementById("parent-msg-" + childId);
+      const fileInput = document.getElementById("parent-file-" + childId);
+      const ok = document.getElementById("parent-msg-ok-" + childId);
+
+      const text = textarea.value.trim();
+      const fileUrl = fileInput.value.trim();
+
+      if (!text && !fileUrl) {
+        alert("Напиши съобщение или постави линк към файл.");
+        return;
+      }
+
+      const messageText = text || "Изпратен е нов файл/линк.";
+
+      await updateDoc(doc(db, "children", childId), {
+        adminNotes: arrayUnion({
+          text: messageText,
+          fileUrl: fileUrl,
+          date: noteDate()
+        }),
+        updatedAt: serverTimestamp()
+      });
+
+      try {
+        await fetch("/api/send-parent-notification", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            childId: childId,
+            childCode: child.childCode || "",
+            childName: child.childName || "",
+            messageText: messageText
+          })
+        });
+      } catch (error) {
+        console.error("Грешка при известие към родител:", error);
+      }
+
+      textarea.value = "";
+      fileInput.value = "";
+      ok.textContent = "Изпратено!";
+
+      setTimeout(() => ok.textContent = "", 2500);
+
+      await loadChildren();
+    };
 
     searchInput.addEventListener("input", renderCurrentView);
 
