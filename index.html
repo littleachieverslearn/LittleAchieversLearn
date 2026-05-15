@@ -141,6 +141,7 @@
       font-size: 15px;
       line-height: 1.5;
       font-weight: bold;
+      word-break: break-word;
     }
 
     .notice.success {
@@ -338,7 +339,13 @@
         throw new Error("Service worker не се поддържа.");
       }
 
-      return await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+        scope: "/"
+      });
+
+      await navigator.serviceWorker.ready;
+
+      return registration;
     }
 
     notifyBtn.addEventListener("click", async function() {
@@ -346,8 +353,18 @@
         notifyBtn.disabled = true;
         notifyBtn.textContent = "Включва се...";
 
+        if (!window.isSecureContext) {
+          showNotice("Грешка: сайтът трябва да е отворен през HTTPS.", "error");
+          return;
+        }
+
         if (!("Notification" in window)) {
           showNotice("Този браузър не поддържа известия.", "error");
+          return;
+        }
+
+        if (!("serviceWorker" in navigator)) {
+          showNotice("Този браузър не поддържа service worker известия.", "error");
           return;
         }
 
@@ -375,7 +392,7 @@
         });
 
         if (!token) {
-          showNotice("Не беше получен notification token.", "error");
+          showNotice("Грешка: не беше получен notification token.", "error");
           return;
         }
 
@@ -392,7 +409,12 @@
         showNotice("Готово! Ще получаваш известие при всяко ново записано дете.", "success");
       } catch (error) {
         console.error(error);
-        showNotice("Грешка при включване на известията. Провери manifest.json, firebase-messaging-sw.js и Vercel Environment Variable.", "error");
+
+        const errorText = error && error.message
+          ? error.message
+          : String(error);
+
+        showNotice("Грешка: " + errorText, "error");
       } finally {
         notifyBtn.disabled = false;
         notifyBtn.textContent = "Разреши известия";
