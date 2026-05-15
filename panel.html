@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>РђРґРјРёРЅ РїР°РЅРµР» | Little Achievers</title>
+  <title>Админ панел | Little Achievers</title>
 
   <style>
     body {
@@ -276,42 +276,42 @@
   <div class="container">
 
     <div id="loginBox" class="login">
-      <h1>РђРґРјРёРЅ РїР°РЅРµР»</h1>
-      <p>Р’СЉРІРµРґРµС‚Рµ РїР°СЂРѕР»Р° Р·Р° РґРѕСЃС‚СЉРї:</p>
-      <input type="password" id="passwordInput" placeholder="РџР°СЂРѕР»Р°">
-      <button onclick="checkPassword()">Р’С…РѕРґ</button>
-      <a class="btn secondary" href="./index.html">РќР°С‡Р°Р»РЅР° СЃС‚СЂР°РЅРёС†Р°</a>
+      <h1>Админ панел</h1>
+      <p>Въведете парола за достъп:</p>
+      <input type="password" id="passwordInput" placeholder="Парола">
+      <button onclick="checkPassword()">Вход</button>
+      <a class="btn secondary" href="./index.html">Начална страница</a>
     </div>
 
     <div id="adminBox" class="hidden">
       <div class="top">
         <div class="top-row">
           <div>
-            <h1>Р—Р°РїРёСЃР°РЅРё РґРµС†Р° | Little Achievers</h1>
-            <div>РќРѕРІРё Р·Р°РїРёСЃРё РґРѕ 48 С‡Р°СЃР° СЃРІРµС‚СЏС‚ РІ Р·РµР»РµРЅРѕ. Р РѕРґРёС‚РµР»СЃРєРё РІСЉРїСЂРѕСЃРё Р±РµР· РѕС‚РіРѕРІРѕСЂ СЃРІРµС‚СЏС‚ РІ СЃРёРЅСЊРѕ.</div>
+            <h1>Записани деца | Little Achievers</h1>
+            <div>Нови записи до 48 часа светят в зелено. Родителски въпроси без отговор светят в синьо.</div>
           </div>
 
           <div>
-            <a class="btn secondary" href="./index.html">РќР°С‡Р°Р»Рѕ</a>
-            <a class="btn secondary" href="./form.html">+ РќРѕРІР° С„РѕСЂРјР°</a>
-            <button onclick="window.print()">РџСЂРёРЅС‚РёСЂР°Р№ / PDF</button>
-            <button class="danger" onclick="logout()">РР·С…РѕРґ</button>
+            <a class="btn secondary" href="./index.html">Начало</a>
+            <a class="btn secondary" href="./form.html">+ Нова форма</a>
+            <button onclick="window.print()">Принтирай / PDF</button>
+            <button class="danger" onclick="logout()">Изход</button>
           </div>
         </div>
 
         <div class="tabs">
-          <button id="activeTab" class="tab-active" onclick="setViewMode('active')">РђРєС‚РёРІРЅРё РґРµС†Р°</button>
-          <button id="trashTab" class="secondary" onclick="setViewMode('trash')">РљРѕС€С‡Рµ</button>
+          <button id="activeTab" class="tab-active" onclick="setViewMode('active')">Активни деца</button>
+          <button id="trashTab" class="secondary" onclick="setViewMode('trash')">Кошче</button>
         </div>
 
         <div class="search">
-          <input id="searchInput" type="text" placeholder="РўСЉСЂСЃРё РїРѕ РёРјРµ, СЂРѕРґРёС‚РµР», С‚РµР»РµС„РѕРЅ, РёРјРµР№Р», РєРѕРґ...">
+          <input id="searchInput" type="text" placeholder="Търси по име, родител, телефон, имейл, код...">
         </div>
       </div>
 
-      <div class="stats" id="stats">Р—Р°СЂРµР¶РґР°РЅРµ...</div>
+      <div class="stats" id="stats">Зареждане...</div>
 
-      <div id="childrenList">Р—Р°СЂРµР¶РґР°РЅРµ...</div>
+      <div id="childrenList">Зареждане...</div>
     </div>
 
   </div>
@@ -362,7 +362,7 @@
         sessionStorage.setItem("adminAccess", "yes");
         showAdmin();
       } else {
-        alert("Р“СЂРµС€РЅР° РїР°СЂРѕР»Р°!");
+        alert("Грешна парола!");
       }
     }
 
@@ -402,15 +402,15 @@
 
     function safeText(value) {
       if (Array.isArray(value)) {
-        return value.length ? escapeHtml(value.join(", ")) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
+        return value.length ? escapeHtml(value.join(", ")) : "Няма информация";
       }
 
-      return value && value.toString().trim() !== "" ? escapeHtml(value) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
+      return value && value.toString().trim() !== "" ? escapeHtml(value) : "Няма информация";
     }
 
     function formatDate(timestamp) {
       if (!timestamp || !timestamp.toDate) {
-        return "РќСЏРјР° РґР°С‚Р°";
+        return "Няма дата";
       }
 
       return timestamp.toDate().toLocaleString("bg-BG", {
@@ -454,7 +454,7 @@
     }
 
     async function loadChildren() {
-      childrenList.textContent = "Р—Р°СЂРµР¶РґР°РЅРµ...";
+      childrenList.textContent = "Зареждане...";
 
       const q = query(collection(db, "children"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
@@ -490,9 +490,9 @@
       });
 
       stats.innerHTML = `
-        РђРєС‚РёРІРЅРё РґРµС†Р°: <b>${active.length}</b> |
-        Р’ РєРѕС€С‡Рµ: <b>${trash.length}</b> |
-        РџРѕРєР°Р·Р°РЅРё: <b>${filtered.length}</b>
+        Активни деца: <b>${active.length}</b> |
+        В кошче: <b>${trash.length}</b> |
+        Показани: <b>${filtered.length}</b>
       `;
 
       renderChildren(filtered);
@@ -502,7 +502,7 @@
       childrenList.innerHTML = "";
 
       if (!children.length) {
-        childrenList.innerHTML = "<div class='card'>РќСЏРјР° РЅР°РјРµСЂРµРЅРё Р·Р°РїРёСЃРё.</div>";
+        childrenList.innerHTML = "<div class='card'>Няма намерени записи.</div>";
         return;
       }
 
@@ -532,115 +532,115 @@
           ${
             childDeleted
               ? ""
-              : `<button class="x-btn" title="РџСЂРµРјРµСЃС‚Рё РІ РєРѕС€С‡Рµ" onclick="moveToTrash('${child.id}')">Г—</button>`
+              : `<button class="x-btn" title="Премести в кошче" onclick="moveToTrash('${child.id}')">×</button>`
           }
 
           <h2>${index + 1}. ${safeText(child.childName)}</h2>
 
           <div class="badges">
-            <span class="badge badge-code">РљРѕРґ: ${safeText(child.childCode)}</span>
-            ${childIsNew && !childDeleted ? `<span class="badge badge-new">РќРћР’Рћ РґРѕ 48 С‡Р°СЃР°</span>` : ""}
-            ${childHasQuestion && !childDeleted ? `<span class="badge badge-question">РРњРђ Р’РЄРџР РћРЎ РћРў Р РћР”РРўР•Р›</span>` : ""}
-            ${childDeleted ? `<span class="badge badge-trash">Р’ РљРћРЁР§Р•</span>` : ""}
+            <span class="badge badge-code">Код: ${safeText(child.childCode)}</span>
+            ${childIsNew && !childDeleted ? `<span class="badge badge-new">НОВО до 48 часа</span>` : ""}
+            ${childHasQuestion && !childDeleted ? `<span class="badge badge-question">ИМА ВЪПРОС ОТ РОДИТЕЛ</span>` : ""}
+            ${childDeleted ? `<span class="badge badge-trash">В КОШЧЕ</span>` : ""}
           </div>
 
-          <div class="small">Р—Р°РїРёСЃР°РЅРѕ РЅР°: ${formatDate(child.createdAt)}</div>
-          ${childDeleted ? `<div class="small">РР·С‚СЂРёС‚Рѕ РЅР°: ${formatDate(child.deletedAt)}</div>` : ""}
+          <div class="small">Записано на: ${formatDate(child.createdAt)}</div>
+          ${childDeleted ? `<div class="small">Изтрито на: ${formatDate(child.deletedAt)}</div>` : ""}
 
-          <div class="section-title">Р”Р°РЅРЅРё Р·Р° РґРµС‚РµС‚Рѕ</div>
-          <div class="item"><span class="label">РРјРµ:</span> ${safeText(child.childName)}</div>
-          <div class="item"><span class="label">Р”Р°С‚Р° РЅР° СЂР°Р¶РґР°РЅРµ:</span> ${safeText(child.birthDate)}</div>
-          <div class="item"><span class="label">РЈС‡РёР»РёС‰Рµ Рё РєР»Р°СЃ:</span> ${safeText(child.schoolAndClass)}</div>
-          <div class="item"><span class="label">РђР»РµСЂРіРёРё / СЃРїРµС†РёС„РёС‡РЅРё РЅСѓР¶РґРё:</span> ${safeText(child.allergiesNeeds)}</div>
+          <div class="section-title">Данни за детето</div>
+          <div class="item"><span class="label">Име:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">Дата на раждане:</span> ${safeText(child.birthDate)}</div>
+          <div class="item"><span class="label">Училище и клас:</span> ${safeText(child.schoolAndClass)}</div>
+          <div class="item"><span class="label">Алергии / специфични нужди:</span> ${safeText(child.allergiesNeeds)}</div>
 
-          <div class="section-title">Р”Р°РЅРЅРё Р·Р° СЂРѕРґРёС‚РµР»</div>
-          <div class="item"><span class="label">Р РѕРґРёС‚РµР»:</span> ${safeText(child.parentName)}</div>
-          <div class="item"><span class="label">РњРµСЃС‚РѕСЂР°Р±РѕС‚Р°:</span> ${safeText(child.parentWorkplace)}</div>
-          <div class="item"><span class="label">РўРµР»РµС„РѕРЅ:</span> ${safeText(child.phone)}</div>
-          <div class="item"><span class="label">РРјРµР№Р»:</span> ${safeText(child.email)}</div>
-          <div class="item"><span class="label">РђРґСЂРµСЃ:</span> ${safeText(child.address)}</div>
+          <div class="section-title">Данни за родител</div>
+          <div class="item"><span class="label">Родител:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Месторабота:</span> ${safeText(child.parentWorkplace)}</div>
+          <div class="item"><span class="label">Телефон:</span> ${safeText(child.phone)}</div>
+          <div class="item"><span class="label">Имейл:</span> ${safeText(child.email)}</div>
+          <div class="item"><span class="label">Адрес:</span> ${safeText(child.address)}</div>
 
-          <div class="section-title">РЈС‡Р°СЃС‚РёРµ</div>
-          <div class="item"><span class="label">Р¤РѕСЂРјР°:</span> ${safeText(child.participationForm)}</div>
-          <div class="item"><span class="label">РџРµСЂРёРѕРґ:</span> ${safeText(child.period)}</div>
-          <div class="item"><span class="label">РўР°РєСЃР°:</span> ${safeText(child.programFee)}</div>
-          <div class="item"><span class="label">Р”РѕРїСЉР»РЅРёС‚РµР»РЅР° РёРЅС„РѕСЂРјР°С†РёСЏ:</span> ${safeText(child.additionalInfo)}</div>
+          <div class="section-title">Участие</div>
+          <div class="item"><span class="label">Форма:</span> ${safeText(child.participationForm)}</div>
+          <div class="item"><span class="label">Период:</span> ${safeText(child.period)}</div>
+          <div class="item"><span class="label">Такса:</span> ${safeText(child.programFee)}</div>
+          <div class="item"><span class="label">Допълнителна информация:</span> ${safeText(child.additionalInfo)}</div>
 
           ${
             childDeleted
               ? `
-                <div class="section-title">РљРѕС€С‡Рµ</div>
-                <button class="green" onclick="restoreChild('${child.id}')">Р’СЉР·СЃС‚Р°РЅРѕРІРё</button>
-                <button class="danger" onclick="deleteChildForever('${child.id}')">РР·С‚СЂРёР№ РѕРєРѕРЅС‡Р°С‚РµР»РЅРѕ</button>
+                <div class="section-title">Кошче</div>
+                <button class="green" onclick="restoreChild('${child.id}')">Възстанови</button>
+                <button class="danger" onclick="deleteChildForever('${child.id}')">Изтрий окончателно</button>
               `
               : `
-                <div class="section-title">РЎС‚Р°С‚СѓСЃ РєСЉРј СЂРѕРґРёС‚РµР»СЏ</div>
-                <textarea id="status-${child.id}" placeholder="РќР°РїРёС€Рё СЃС‚Р°С‚СѓСЃ, РєРѕР№С‚Рѕ СЂРѕРґРёС‚РµР»СЏС‚ РґР° РІРёР¶РґР°...">${escapeHtml(child.statusText || "")}</textarea>
-                <button onclick="saveStatus('${child.id}')">Р—Р°РїРѕРјРЅРё СЃС‚Р°С‚СѓСЃ</button>
+                <div class="section-title">Статус към родителя</div>
+                <textarea id="status-${child.id}" placeholder="Напиши статус, който родителят да вижда...">${escapeHtml(child.statusText || "")}</textarea>
+                <button onclick="saveStatus('${child.id}')">Запомни статус</button>
                 <span id="status-ok-${child.id}" class="save-ok"></span>
 
-                <div class="section-title">РќРѕРІР° Р±РµР»РµР¶РєР° РєСЉРј С‚РѕРІР° РґРµС‚Рµ</div>
-                <textarea id="note-${child.id}" placeholder="РќР°РїРёС€Рё Р±РµР»РµР¶РєР° РєСЉРј СЂРѕРґРёС‚РµР»СЏ..."></textarea>
-                <button onclick="addNote('${child.id}')">Р—Р°РїРѕРјРЅРё Р±РµР»РµР¶РєР°</button>
+                <div class="section-title">Нова бележка към това дете</div>
+                <textarea id="note-${child.id}" placeholder="Напиши бележка към родителя..."></textarea>
+                <button onclick="addNote('${child.id}')">Запомни бележка</button>
                 <span id="note-ok-${child.id}" class="save-ok"></span>
 
-                <div class="section-title">РЎСЉРѕР±С‰РµРЅРёРµ РєСЉРј СЂРѕРґРёС‚РµР»СЏ</div>
-                <textarea id="parent-msg-${child.id}" placeholder="РќР°РїРёС€Рё СЃСЉРѕР±С‰РµРЅРёРµ РєСЉРј СЂРѕРґРёС‚РµР»СЏ..."></textarea>
+                <div class="section-title">Съобщение към родителя</div>
+                <textarea id="parent-msg-${child.id}" placeholder="Напиши съобщение към родителя..."></textarea>
 
                 <input
                   id="parent-file-${child.id}"
                   type="text"
-                  placeholder="Р›РёРЅРє РєСЉРј С„Р°Р№Р», СЃРЅРёРјРєР°, Word, Excel РёР»Рё РєР»РёРї /РїРѕ Р¶РµР»Р°РЅРёРµ/"
+                  placeholder="Линк към файл, снимка, Word, Excel или клип /по желание/"
                   style="margin-top:8px;"
                 >
 
                 <button class="blue" onclick="sendMessageToParent('${child.id}')">
-                  РР·РїСЂР°С‚Рё СЃСЉРѕР±С‰РµРЅРёРµ РєСЉРј СЂРѕРґРёС‚РµР»СЏ
+                  Изпрати съобщение към родителя
                 </button>
 
                 <span id="parent-msg-ok-${child.id}" class="save-ok"></span>
 
                 <div class="notes">
-                  <b>Р—Р°РїР°Р·РµРЅРё Р±РµР»РµР¶РєРё:</b>
+                  <b>Запазени бележки:</b>
                   ${
                     notes.length
                     ? notes.map((n, noteIndex) => `
                       <div class="note">
-                        <button class="x-btn" title="РР·С‚СЂРёР№ Р±РµР»РµР¶РєР°С‚Р°" onclick="deleteNote('${child.id}', ${noteIndex})">Г—</button>
+                        <button class="x-btn" title="Изтрий бележката" onclick="deleteNote('${child.id}', ${noteIndex})">×</button>
                         <div>${safeText(n.text)}</div>
-                        ${n.fileUrl ? `<div><a href="${escapeHtml(n.fileUrl)}" target="_blank">РћС‚РІРѕСЂРё РїСЂРёРєР°С‡РµРЅ Р»РёРЅРє</a></div>` : ""}
+                        ${n.fileUrl ? `<div><a href="${escapeHtml(n.fileUrl)}" target="_blank">Отвори прикачен линк</a></div>` : ""}
                         <div class="small">${safeText(n.date)}</div>
                         <div style="clear:both;"></div>
                       </div>
                     `).join("")
-                    : "<div class='small'>Р’СЃРµ РѕС‰Рµ РЅСЏРјР° Р±РµР»РµР¶РєРё.</div>"
+                    : "<div class='small'>Все още няма бележки.</div>"
                   }
                 </div>
 
-                <div class="section-title">Р’СЉРїСЂРѕСЃРё РѕС‚ СЂРѕРґРёС‚РµР»СЏ</div>
+                <div class="section-title">Въпроси от родителя</div>
                 <div class="notes">
                   ${
                     parentMessages.length
                     ? parentMessages.map((m, msgIndex) => `
                       <div class="parent-message ${m.answer ? "" : "unanswered"}">
-                        <div><b>Р’СЉРїСЂРѕСЃ:</b> ${safeText(m.text)}</div>
+                        <div><b>Въпрос:</b> ${safeText(m.text)}</div>
                         <div class="small">${safeText(m.date)}</div>
 
-                        <div style="margin-top:10px;"><b>РўРІРѕСЏС‚ РѕС‚РіРѕРІРѕСЂ:</b></div>
-                        <textarea id="answer-${child.id}-${msgIndex}" placeholder="РќР°РїРёС€Рё РѕС‚РіРѕРІРѕСЂ РєСЉРј СЂРѕРґРёС‚РµР»СЏ...">${escapeHtml(m.answer || "")}</textarea>
-                        <button class="blue" onclick="saveAnswer('${child.id}', ${msgIndex})">Р—Р°РїРѕРјРЅРё РѕС‚РіРѕРІРѕСЂ</button>
+                        <div style="margin-top:10px;"><b>Твоят отговор:</b></div>
+                        <textarea id="answer-${child.id}-${msgIndex}" placeholder="Напиши отговор към родителя...">${escapeHtml(m.answer || "")}</textarea>
+                        <button class="blue" onclick="saveAnswer('${child.id}', ${msgIndex})">Запомни отговор</button>
                         <span id="answer-ok-${child.id}-${msgIndex}" class="save-ok"></span>
 
-                        ${m.answerDate ? `<div class="small">РћС‚РіРѕРІРѕСЂРµРЅРѕ РЅР°: ${safeText(m.answerDate)}</div>` : ""}
+                        ${m.answerDate ? `<div class="small">Отговорено на: ${safeText(m.answerDate)}</div>` : ""}
                       </div>
                     `).join("")
-                    : "<div class='small'>РќСЏРјР° РІСЉРїСЂРѕСЃРё РѕС‚ СЂРѕРґРёС‚РµР»СЏ.</div>"
+                    : "<div class='small'>Няма въпроси от родителя.</div>"
                   }
                 </div>
 
                 <div class="admin-actions">
-                  <button class="secondary" onclick="copyParentLink('${child.childCode || ""}')">РљРѕРїРёСЂР°Р№ Р»РёРЅРє Р·Р° СЂРѕРґРёС‚РµР»СЏ</button>
-                  <button class="danger" onclick="moveToTrash('${child.id}')">РџСЂРµРјРµСЃС‚Рё РґРµС‚РµС‚Рѕ РІ РєРѕС€С‡Рµ</button>
+                  <button class="secondary" onclick="copyParentLink('${child.childCode || ""}')">Копирай линк за родителя</button>
+                  <button class="danger" onclick="moveToTrash('${child.id}')">Премести детето в кошче</button>
                 </div>
               `
           }
@@ -656,7 +656,7 @@
       const text = textarea.value.trim();
 
       if (!text) {
-        alert("РќР°РїРёС€Рё Р±РµР»РµР¶РєР°.");
+        alert("Напиши бележка.");
         return;
       }
 
@@ -668,14 +668,14 @@
         updatedAt: serverTimestamp()
       });
 
-      ok.textContent = "Р—Р°РїР°Р·РµРЅРѕ!";
+      ok.textContent = "Запазено!";
       textarea.value = "";
 
       await loadChildren();
     }
 
     window.deleteNote = async function(childId, noteIndex) {
-      if (!confirm("РЎРёРіСѓСЂРЅР° Р»Рё СЃРё, С‡Рµ РёСЃРєР°С€ РґР° РёР·С‚СЂРёРµС€ С‚Р°Р·Рё Р±РµР»РµР¶РєР°?")) {
+      if (!confirm("Сигурна ли си, че искаш да изтриеш тази бележка?")) {
         return;
       }
 
@@ -701,7 +701,7 @@
         updatedAt: serverTimestamp()
       });
 
-      ok.textContent = "Р—Р°РїР°Р·РµРЅРѕ!";
+      ok.textContent = "Запазено!";
       setTimeout(() => ok.textContent = "", 2000);
     }
 
@@ -722,14 +722,14 @@
         updatedAt: serverTimestamp()
       });
 
-      ok.textContent = "Р—Р°РїР°Р·РµРЅРѕ!";
+      ok.textContent = "Запазено!";
       setTimeout(() => ok.textContent = "", 2000);
 
       await loadChildren();
     }
 
     window.moveToTrash = async function(childId) {
-      if (!confirm("Р”Р° РїСЂРµРјРµСЃС‚СЏ Р»Рё С‚РѕРІР° РґРµС‚Рµ РІ РєРѕС€С‡РµС‚Рѕ? РњРѕР¶Рµ РґР° Р±СЉРґРµ РІСЉР·СЃС‚Р°РЅРѕРІРµРЅРѕ.")) {
+      if (!confirm("Да преместя ли това дете в кошчето? Може да бъде възстановено.")) {
         return;
       }
 
@@ -751,7 +751,7 @@
     }
 
     window.deleteChildForever = async function(childId) {
-      if (!confirm("Р’РќРРњРђРќРР•: РўРѕРІР° С‰Рµ РёР·С‚СЂРёРµ РґРµС‚РµС‚Рѕ РѕРєРѕРЅС‡Р°С‚РµР»РЅРѕ РѕС‚ Firebase. Р”Р° РїСЂРѕРґСЉР»Р¶Р° Р»Рё?")) {
+      if (!confirm("ВНИМАНИЕ: Това ще изтрие детето окончателно от Firebase. Да продължа ли?")) {
         return;
       }
 
@@ -762,14 +762,14 @@
     window.copyParentLink = async function(code) {
       const url = window.location.origin + "/status.html?code=" + encodeURIComponent(code);
       await navigator.clipboard.writeText(url);
-      alert("Р›РёРЅРєСЉС‚ Рµ РєРѕРїРёСЂР°РЅ: " + url);
+      alert("Линкът е копиран: " + url);
     }
 
     window.sendMessageToParent = async function(childId) {
       const child = allChildren.find(c => c.id === childId);
 
       if (!child) {
-        alert("РќРµ Рµ РЅР°РјРµСЂРµРЅРѕ РґРµС‚Рµ.");
+        alert("Не е намерено дете.");
         return;
       }
 
@@ -781,11 +781,11 @@
       const fileUrl = fileInput.value.trim();
 
       if (!text && !fileUrl) {
-        alert("РќР°РїРёС€Рё СЃСЉРѕР±С‰РµРЅРёРµ РёР»Рё РїРѕСЃС‚Р°РІРё Р»РёРЅРє РєСЉРј С„Р°Р№Р».");
+        alert("Напиши съобщение или постави линк към файл.");
         return;
       }
 
-      const messageText = text || "РР·РїСЂР°С‚РµРЅ Рµ РЅРѕРІ С„Р°Р№Р»/Р»РёРЅРє.";
+      const messageText = text || "Изпратен е нов файл/линк.";
 
       await updateDoc(doc(db, "children", childId), {
         adminNotes: arrayUnion({
@@ -810,12 +810,12 @@
           })
         });
       } catch (error) {
-        console.error("Р“СЂРµС€РєР° РїСЂРё РёР·РІРµСЃС‚РёРµ РєСЉРј СЂРѕРґРёС‚РµР»:", error);
+        console.error("Грешка при известие към родител:", error);
       }
 
       textarea.value = "";
       fileInput.value = "";
-      ok.textContent = "РР·РїСЂР°С‚РµРЅРѕ!";
+      ok.textContent = "Изпратено!";
 
       setTimeout(() => ok.textContent = "", 2500);
 
