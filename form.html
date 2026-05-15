@@ -326,6 +326,22 @@
       try {
         await addDoc(collection(db, "children"), childData);
 
+        try {
+          await fetch("/api/send-notification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              childName: childData.childName,
+              birthDate: childData.birthDate,
+              childCode: childData.childCode
+            })
+          });
+        } catch (notifyError) {
+          console.error("Грешка при изпращане на известие:", notifyError);
+        }
+
         message.textContent = "Заявката е изпратена успешно!";
         message.className = "success";
 
