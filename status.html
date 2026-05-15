@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Проверка с код | Little Achievers</title>
+  <title>РџСЂРѕРІРµСЂРєР° СЃ РєРѕРґ | Little Achievers</title>
 
   <style>
     body {
@@ -168,16 +168,16 @@
   <div class="container">
 
     <div class="box">
-      <h1>Проверка с 4-цифрен код</h1>
-      <p>Въведете кода, който получихте след записване.</p>
+      <h1>РџСЂРѕРІРµСЂРєР° СЃ 4-С†РёС„СЂРµРЅ РєРѕРґ</h1>
+      <p>Р’СЉРІРµРґРµС‚Рµ РєРѕРґР°, РєРѕР№С‚Рѕ РїРѕР»СѓС‡РёС…С‚Рµ СЃР»РµРґ Р·Р°РїРёСЃРІР°РЅРµ.</p>
 
       <input id="codeInput" type="text" maxlength="4" placeholder="0000">
 
       <br>
 
-      <button onclick="findChild()">Провери</button>
-      <button class="secondary" onclick="rememberCode()">Запомни</button>
-      <a class="btn secondary" href="./index.html">Начало</a>
+      <button onclick="findChild()">РџСЂРѕРІРµСЂРё</button>
+      <button class="secondary" onclick="rememberCode()">Р—Р°РїРѕРјРЅРё</button>
+      <a class="btn secondary" href="./index.html">РќР°С‡Р°Р»Рѕ</a>
 
       <div id="message"></div>
     </div>
@@ -238,10 +238,10 @@
 
     function safeText(value) {
       if (Array.isArray(value)) {
-        return value.length ? escapeHtml(value.join(", ")) : "Няма информация";
+        return value.length ? escapeHtml(value.join(", ")) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
       }
 
-      return value && value.toString().trim() !== "" ? escapeHtml(value) : "Няма информация";
+      return value && value.toString().trim() !== "" ? escapeHtml(value) : "РќСЏРјР° РёРЅС„РѕСЂРјР°С†РёСЏ";
     }
 
     function getCodeFromUrl() {
@@ -264,9 +264,9 @@
 
       if (code.length === 4) {
         localStorage.setItem("littleAchieversChildCode", code);
-        message.innerHTML = "<p class='success'>Кодът е запомнен на това устройство.</p>";
+        message.innerHTML = "<p class='success'>РљРѕРґСЉС‚ Рµ Р·Р°РїРѕРјРЅРµРЅ РЅР° С‚РѕРІР° СѓСЃС‚СЂРѕР№СЃС‚РІРѕ.</p>";
       } else {
-        message.innerHTML = "<p class='error'>Въведете 4-цифрен код.</p>";
+        message.innerHTML = "<p class='error'>Р’СЉРІРµРґРµС‚Рµ 4-С†РёС„СЂРµРЅ РєРѕРґ.</p>";
       }
     }
 
@@ -278,7 +278,7 @@
       currentChild = null;
 
       if (code.length !== 4) {
-        message.innerHTML = "<p class='error'>Въведете 4-цифрен код.</p>";
+        message.innerHTML = "<p class='error'>Р’СЉРІРµРґРµС‚Рµ 4-С†РёС„СЂРµРЅ РєРѕРґ.</p>";
         return;
       }
 
@@ -286,7 +286,7 @@
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        result.innerHTML = "<div class='card error'>Няма намерен запис с този код.</div>";
+        result.innerHTML = "<div class='card error'>РќСЏРјР° РЅР°РјРµСЂРµРЅ Р·Р°РїРёСЃ СЃ С‚РѕР·Рё РєРѕРґ.</div>";
         return;
       }
 
@@ -298,7 +298,7 @@
       });
 
       if (currentChild.deletedAt) {
-        result.innerHTML = "<div class='card error'>Този запис вече не е активен.</div>";
+        result.innerHTML = "<div class='card error'>РўРѕР·Рё Р·Р°РїРёСЃ РІРµС‡Рµ РЅРµ Рµ Р°РєС‚РёРІРµРЅ.</div>";
         return;
       }
 
@@ -313,25 +313,25 @@
       result.innerHTML = `
         <div class="card">
           <h1>${safeText(child.childName)}</h1>
-          <div class="code">Код: ${safeText(child.childCode)}</div>
+          <div class="code">РљРѕРґ: ${safeText(child.childCode)}</div>
 
-          <div class="section-title">Статус / съобщение</div>
+          <div class="section-title">РЎС‚Р°С‚СѓСЃ / СЃСЉРѕР±С‰РµРЅРёРµ</div>
           <div class="item">${safeText(child.statusText)}</div>
 
-          <div class="section-title">Известия</div>
+          <div class="section-title">РР·РІРµСЃС‚РёСЏ</div>
           <button class="blue" onclick="enableParentNotifications()">
-            Разреши известия за това дете
+            Р Р°Р·СЂРµС€Рё РёР·РІРµСЃС‚РёСЏ Р·Р° С‚РѕРІР° РґРµС‚Рµ
           </button>
           <div id="parentNotifyStatus" class="small"></div>
 
-          <div class="section-title">Основна информация</div>
-          <div class="item"><span class="label">Дете:</span> ${safeText(child.childName)}</div>
-          <div class="item"><span class="label">Родител:</span> ${safeText(child.parentName)}</div>
-          <div class="item"><span class="label">Форма на участие:</span> ${safeText(child.participationForm)}</div>
-          <div class="item"><span class="label">Период:</span> ${safeText(child.period)}</div>
-          <div class="item"><span class="label">Такса:</span> ${safeText(child.programFee)}</div>
+          <div class="section-title">РћСЃРЅРѕРІРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ</div>
+          <div class="item"><span class="label">Р”РµС‚Рµ:</span> ${safeText(child.childName)}</div>
+          <div class="item"><span class="label">Р РѕРґРёС‚РµР»:</span> ${safeText(child.parentName)}</div>
+          <div class="item"><span class="label">Р¤РѕСЂРјР° РЅР° СѓС‡Р°СЃС‚РёРµ:</span> ${safeText(child.participationForm)}</div>
+          <div class="item"><span class="label">РџРµСЂРёРѕРґ:</span> ${safeText(child.period)}</div>
+          <div class="item"><span class="label">РўР°РєСЃР°:</span> ${safeText(child.programFee)}</div>
 
-          <div class="section-title">Бележки от Little Achievers</div>
+          <div class="section-title">Р‘РµР»РµР¶РєРё РѕС‚ Little Achievers</div>
           ${
             notes.length
               ? notes.map(n => `
@@ -340,28 +340,28 @@
                   <div class="small">${safeText(n.date)}</div>
                 </div>
               `).join("")
-              : "<div class='small'>Все още няма добавени бележки.</div>"
+              : "<div class='small'>Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РґРѕР±Р°РІРµРЅРё Р±РµР»РµР¶РєРё.</div>"
           }
 
-          <div class="section-title">Въпрос към Little Achievers</div>
-          <textarea id="parentQuestion" placeholder="Напишете въпрос или съобщение към нас..."></textarea>
+          <div class="section-title">Р’СЉРїСЂРѕСЃ РєСЉРј Little Achievers</div>
+          <textarea id="parentQuestion" placeholder="РќР°РїРёС€РµС‚Рµ РІСЉРїСЂРѕСЃ РёР»Рё СЃСЉРѕР±С‰РµРЅРёРµ РєСЉРј РЅР°СЃ..."></textarea>
           <br>
-          <button class="blue" onclick="sendParentQuestion()">Изпрати въпрос</button>
+          <button class="blue" onclick="sendParentQuestion()">РР·РїСЂР°С‚Рё РІСЉРїСЂРѕСЃ</button>
           <span id="questionStatus" class="success"></span>
 
-          <div class="section-title">Моите въпроси и отговори</div>
+          <div class="section-title">РњРѕРёС‚Рµ РІСЉРїСЂРѕСЃРё Рё РѕС‚РіРѕРІРѕСЂРё</div>
           ${
             parentMessages.length
               ? parentMessages.map(m => `
                 <div class="message">
-                  <div><b>Въпрос:</b> ${safeText(m.text)}</div>
+                  <div><b>Р’СЉРїСЂРѕСЃ:</b> ${safeText(m.text)}</div>
                   <div class="small">${safeText(m.date)}</div>
                   <br>
-                  <div><b>Отговор:</b> ${safeText(m.answer || "Все още няма отговор.")}</div>
-                  ${m.answerDate ? `<div class="small">Отговорено на: ${safeText(m.answerDate)}</div>` : ""}
+                  <div><b>РћС‚РіРѕРІРѕСЂ:</b> ${safeText(m.answer || "Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РѕС‚РіРѕРІРѕСЂ.")}</div>
+                  ${m.answerDate ? `<div class="small">РћС‚РіРѕРІРѕСЂРµРЅРѕ РЅР°: ${safeText(m.answerDate)}</div>` : ""}
                 </div>
               `).join("")
-              : "<div class='small'>Все още няма изпратени въпроси.</div>"
+              : "<div class='small'>Р’СЃРµ РѕС‰Рµ РЅСЏРјР° РёР·РїСЂР°С‚РµРЅРё РІСЉРїСЂРѕСЃРё.</div>"
           }
         </div>
       `;
@@ -369,7 +369,7 @@
 
     window.sendParentQuestion = async function() {
       if (!currentChild || !currentChild.id) {
-        alert("Първо въведете валиден код.");
+        alert("РџСЉСЂРІРѕ РІСЉРІРµРґРµС‚Рµ РІР°Р»РёРґРµРЅ РєРѕРґ.");
         return;
       }
 
@@ -378,7 +378,7 @@
       const text = textarea.value.trim();
 
       if (!text) {
-        alert("Напишете въпрос.");
+        alert("РќР°РїРёС€РµС‚Рµ РІСЉРїСЂРѕСЃ.");
         return;
       }
 
@@ -392,15 +392,33 @@
         updatedAt: serverTimestamp()
       });
 
+      try {
+        await fetch("/api/send-notification", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: "Нов въпрос от родител",
+            body: `${currentChild.childName || "Дете"}: ${text}`,
+            childName: currentChild.childName || "",
+            birthDate: currentChild.birthDate || "",
+            childCode: currentChild.childCode || ""
+          })
+        });
+      } catch (notifyError) {
+        console.error("Грешка при известие към админ:", notifyError);
+      }
+
       textarea.value = "";
-      status.textContent = "Въпросът е изпратен.";
+      status.textContent = "Р’СЉРїСЂРѕСЃСЉС‚ Рµ РёР·РїСЂР°С‚РµРЅ.";
 
       await findChild();
     }
 
     window.enableParentNotifications = async function() {
       if (!currentChild || !currentChild.id) {
-        alert("Първо въведете валиден код.");
+        alert("РџСЉСЂРІРѕ РІСЉРІРµРґРµС‚Рµ РІР°Р»РёРґРµРЅ РєРѕРґ.");
         return;
       }
 
@@ -408,26 +426,26 @@
 
       try {
         if (!("Notification" in window)) {
-          status.textContent = "Този браузър не поддържа известия.";
+          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° РёР·РІРµСЃС‚РёСЏ.";
           return;
         }
 
         if (!("serviceWorker" in navigator)) {
-          status.textContent = "Този браузър не поддържа service worker известия.";
+          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° service worker РёР·РІРµСЃС‚РёСЏ.";
           return;
         }
 
         const supported = await isSupported();
 
         if (!supported) {
-          status.textContent = "Този браузър не поддържа Firebase push известия.";
+          status.textContent = "РўРѕР·Рё Р±СЂР°СѓР·СЉСЂ РЅРµ РїРѕРґРґСЉСЂР¶Р° Firebase push РёР·РІРµСЃС‚РёСЏ.";
           return;
         }
 
         const permission = await Notification.requestPermission();
 
         if (permission !== "granted") {
-          status.textContent = "Известията не са разрешени.";
+          status.textContent = "РР·РІРµСЃС‚РёСЏС‚Р° РЅРµ СЃР° СЂР°Р·СЂРµС€РµРЅРё.";
           return;
         }
 
@@ -441,7 +459,7 @@
         });
 
         if (!token) {
-          status.textContent = "Не беше получен notification token.";
+          status.textContent = "РќРµ Р±РµС€Рµ РїРѕР»СѓС‡РµРЅ notification token.";
           return;
         }
 
@@ -450,10 +468,10 @@
           updatedAt: serverTimestamp()
         });
 
-        status.textContent = "Готово! Ще получавате известия за това дете.";
+        status.textContent = "Р“РѕС‚РѕРІРѕ! Р©Рµ РїРѕР»СѓС‡Р°РІР°С‚Рµ РёР·РІРµСЃС‚РёСЏ Р·Р° С‚РѕРІР° РґРµС‚Рµ.";
       } catch (error) {
         console.error(error);
-        status.textContent = "Грешка при включване на известията.";
+        status.textContent = "Р“СЂРµС€РєР° РїСЂРё РІРєР»СЋС‡РІР°РЅРµ РЅР° РёР·РІРµСЃС‚РёСЏС‚Р°.";
       }
     };
 

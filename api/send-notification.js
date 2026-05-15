@@ -1,4 +1,4 @@
-﻿import admin from "firebase-admin";
+import admin from "firebase-admin";
 
 function getServiceAccount() {
   if (!process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
@@ -30,6 +30,9 @@ export default async function handler(req, res) {
     const birthDate = req.body?.birthDate || "";
     const childCode = req.body?.childCode || "";
 
+    const title = req.body?.title || "Ново записано дете";
+    const body = req.body?.body || `${childName} | Код: ${childCode}`;
+
     const snapshot = await db
       .collection("notificationTokens")
       .where("active", "==", true)
@@ -47,15 +50,15 @@ export default async function handler(req, res) {
     if (!tokens.length) {
       return res.status(200).json({
         success: true,
-        message: "No saved tokens"
+        message: "No saved admin tokens"
       });
     }
 
     const pushMessage = {
       tokens: tokens,
       notification: {
-        title: "Ново записано дете",
-        body: `${childName} | Код: ${childCode}`
+        title: title,
+        body: body
       },
       data: {
         url: "/panel.html",
