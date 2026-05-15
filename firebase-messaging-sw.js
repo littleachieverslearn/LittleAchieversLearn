@@ -15,6 +15,7 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
   const title = payload.notification?.title || "Little Achievers";
+
   const options = {
     body: payload.notification?.body || "Имате ново известие.",
     icon: "/logo.jpg",
@@ -33,19 +34,6 @@ self.addEventListener("notificationclick", function(event) {
   const urlToOpen = event.notification.data?.url || "/panel.html";
 
   event.waitUntil(
-    clients.matchAll({
-      type: "window",
-      includeUncontrolled: true
-    }).then(function(clientList) {
-      for (const client of clientList) {
-        if (client.url.includes(urlToOpen) && "focus" in client) {
-          return client.focus();
-        }
-      }
-
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
-    })
+    clients.openWindow(urlToOpen)
   );
 });

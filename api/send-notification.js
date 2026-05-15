@@ -47,11 +47,11 @@ export default async function handler(req, res) {
     if (!tokens.length) {
       return res.status(200).json({
         success: true,
-        message: "No notification tokens saved yet"
+        message: "No saved tokens"
       });
     }
 
-    const message = {
+    const pushMessage = {
       tokens: tokens,
       notification: {
         title: "Ново записано дете",
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
       }
     };
 
-    const response = await admin.messaging().sendEachForMulticast(message);
+    const response = await admin.messaging().sendEachForMulticast(pushMessage);
 
     if (response.failureCount > 0) {
       const batch = db.batch();
@@ -83,6 +83,7 @@ export default async function handler(req, res) {
       response.responses.forEach((item, index) => {
         if (!item.success) {
           const tokenRef = db.collection("notificationTokens").doc(tokens[index]);
+
           batch.set(tokenRef, {
             active: false,
             error: item.error?.message || "Unknown error",

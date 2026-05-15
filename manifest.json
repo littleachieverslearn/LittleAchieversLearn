@@ -1,7 +1,7 @@
 ﻿{
   "name": "Little Achievers",
   "short_name": "Achievers",
-  "description": "Little Achievers - кодове и известия",
+  "description": "Little Achievers - известия за нови деца",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",

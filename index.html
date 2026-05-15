@@ -6,6 +6,9 @@
 
   <title>Little Achievers | Лятна занималня 2026</title>
 
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#673ab7">
+
   <style>
     body {
       margin: 0;
@@ -72,11 +75,16 @@
       color: #444;
     }
 
-    .actions {
+    .actions,
+    .phone-actions {
       display: flex;
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
+    }
+
+    .phone-actions {
+      margin-top: 18px;
     }
 
     .btn {
@@ -106,6 +114,43 @@
       background: #f4edff;
     }
 
+    .btn.green {
+      background: #0f9d58;
+    }
+
+    .btn.green:hover {
+      background: #0b7f45;
+    }
+
+    .notice {
+      display: none;
+      margin: 18px auto 0;
+      padding: 14px;
+      border-radius: 12px;
+      max-width: 620px;
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: bold;
+    }
+
+    .notice.success {
+      display: block;
+      background: #e6f4ea;
+      color: #137333;
+    }
+
+    .notice.error {
+      display: block;
+      background: #fce8e6;
+      color: #c5221f;
+    }
+
+    .notice.info {
+      display: block;
+      background: #e8f0fe;
+      color: #174ea6;
+    }
+
     .small {
       margin-top: 22px;
       color: #666;
@@ -132,6 +177,11 @@
 
       .text {
         font-size: 15px;
+      }
+
+      .btn {
+        width: 100%;
+        box-sizing: border-box;
       }
     }
   </style>
@@ -164,8 +214,15 @@
       <button class="btn secondary" onclick="openPanel()">Админ панел</button>
     </div>
 
+    <div class="phone-actions">
+      <button id="installBtn" class="btn green" type="button">Добави на началния екран</button>
+      <button id="notifyBtn" class="btn green" type="button">Разреши известия</button>
+    </div>
+
+    <div id="noticeBox" class="notice"></div>
+
     <div class="small">
-      Админ панелът е защитен с парола.
+      Админ панелът е защитен с парола. За известия на телефона натиснете „Разреши известия“.
     </div>
 
   </main>
@@ -181,6 +238,134 @@
         alert("Грешна парола!");
       }
     }
+
+    const noticeBox = document.getElementById("noticeBox");
+
+    function showNotice(text, type = "info") {
+      noticeBox.textContent = text;
+      noticeBox.className = "notice " + type;
+    }
+
+    let deferredInstallPrompt = null;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", function(event) {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      installBtn.style.display = "inline-block";
+    });
+
+    installBtn.addEventListener("click", async function() {
+      if (!deferredInstallPrompt) {
+        showNotice("Ако не се отвори прозорец, отворете менюто на браузъра и изберете „Добави на началния екран“.", "info");
+        return;
+      }
+
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+
+      if (choice.outcome === "accepted") {
+        showNotice("Сайтът е добавен на началния екран.", "success");
+      } else {
+        showNotice("Добавянето беше отказано.", "info");
+      }
+    });
+
+    window.addEventListener("appinstalled", function() {
+      showNotice("Little Achievers е добавен на началния екран.", "success");
+    });
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getMessaging,
+      getToken,
+      isSupported
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoXPhysPJEfeTOFnJUK3ZHR0x66up3L6E",
+      authDomain: "littleachievers.firebaseapp.com",
+      projectId: "littleachievers",
+      storageBucket: "littleachievers.firebasestorage.app",
+      messagingSenderId: "811415959587",
+      appId: "1:811415959587:web:b6c9911ba8e416ab685996",
+      measurementId: "G-YLDS0L7EMF"
+    };
+
+    const vapidKey = "BNpyVpBvIkOYyPOo7i2UbMolAkMxpgzBVs1deLgYBt2BH5D2HYrE3kOVH7TJSI3Oeh3fqSU9lIeMDvQfOYhA8k0";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const notifyBtn = document.getElementById("notifyBtn");
+
+    notifyBtn.addEventListener("click", async function() {
+      try {
+        if (!("Notification" in window)) {
+          showNotice("Този браузър не поддържа известия.", "error");
+          return;
+        }
+
+        if (!("serviceWorker" in navigator)) {
+          showNotice("Този браузър не поддържа service worker известия.", "error");
+          return;
+        }
+
+        const supported = await isSupported();
+
+        if (!supported) {
+          showNotice("Този браузър не поддържа Firebase push известия.", "error");
+          return;
+        }
+
+        const permission = await Notification.requestPermission();
+
+        if (permission !== "granted") {
+          showNotice("Известията не са разрешени.", "error");
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+
+        const messaging = getMessaging(app);
+
+        const token = await getToken(messaging, {
+          vapidKey: vapidKey,
+          serviceWorkerRegistration: registration
+        });
+
+        if (!token) {
+          showNotice("Не беше получен notification token.", "error");
+          return;
+        }
+
+        await setDoc(doc(db, "notificationTokens", token), {
+          token: token,
+          active: true,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          userAgent: navigator.userAgent
+        }, { merge: true });
+
+        localStorage.setItem("littleAchieversNotifications", "yes");
+
+        showNotice("Готово! Ще получавате известия на този телефон при ново записано дете.", "success");
+      } catch (error) {
+        console.error(error);
+        showNotice("Грешка при включване на известията. Провери Firebase Rules, service worker файла и браузъра.", "error");
+      }
+    });
   </script>
 
 </body>
