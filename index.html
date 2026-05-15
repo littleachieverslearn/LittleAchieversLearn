@@ -76,15 +76,17 @@
     }
 
     .actions,
-    .phone-actions {
+    .app-actions {
       display: flex;
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
     }
 
-    .phone-actions {
+    .app-actions {
       margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #eee;
     }
 
     .btn {
@@ -122,12 +124,20 @@
       background: #0b7f45;
     }
 
+    .btn.blue {
+      background: #1a73e8;
+    }
+
+    .btn.blue:hover {
+      background: #1558b0;
+    }
+
     .notice {
       display: none;
       margin: 18px auto 0;
       padding: 14px;
       border-radius: 12px;
-      max-width: 620px;
+      max-width: 650px;
       font-size: 15px;
       line-height: 1.5;
       font-weight: bold;
@@ -155,6 +165,7 @@
       margin-top: 22px;
       color: #666;
       font-size: 14px;
+      line-height: 1.5;
     }
 
     @media (max-width: 600px) {
@@ -214,15 +225,23 @@
       <button class="btn secondary" onclick="openPanel()">Админ панел</button>
     </div>
 
-    <div class="phone-actions">
-      <button id="installBtn" class="btn green" type="button">Добави на началния екран</button>
-      <button id="notifyBtn" class="btn green" type="button">Разреши известия</button>
+    <div class="app-actions">
+      <button id="installBtn" class="btn green" type="button">
+        Добави като приложение на екрана
+      </button>
+
+      <button id="notifyBtn" class="btn blue" type="button">
+        Разреши известия
+      </button>
     </div>
 
     <div id="noticeBox" class="notice"></div>
 
     <div class="small">
-      Админ панелът е защитен с парола. За известия на телефона натиснете „Разреши известия“.
+      За да получаваш известия при ново записано дете, първо добави сайта като приложение,
+      после натисни „Разреши известия“.
+      <br>
+      Админ панелът е защитен с парола.
     </div>
 
   </main>
@@ -240,40 +259,44 @@
     }
 
     const noticeBox = document.getElementById("noticeBox");
+    const installBtn = document.getElementById("installBtn");
+
+    let deferredInstallPrompt = null;
 
     function showNotice(text, type = "info") {
       noticeBox.textContent = text;
       noticeBox.className = "notice " + type;
     }
 
-    let deferredInstallPrompt = null;
-    const installBtn = document.getElementById("installBtn");
-
     window.addEventListener("beforeinstallprompt", function(event) {
       event.preventDefault();
       deferredInstallPrompt = event;
-      installBtn.style.display = "inline-block";
     });
 
     installBtn.addEventListener("click", async function() {
-      if (!deferredInstallPrompt) {
-        showNotice("Ако не се отвори прозорец, отворете менюто на браузъра и изберете „Добави на началния екран“.", "info");
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+
+        const choice = await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+
+        if (choice.outcome === "accepted") {
+          showNotice("Готово! Сайтът е добавен като приложение.", "success");
+        } else {
+          showNotice("Добавянето беше отказано.", "info");
+        }
+
         return;
       }
 
-      deferredInstallPrompt.prompt();
-      const choice = await deferredInstallPrompt.userChoice;
-      deferredInstallPrompt = null;
-
-      if (choice.outcome === "accepted") {
-        showNotice("Сайтът е добавен на началния екран.", "success");
-      } else {
-        showNotice("Добавянето беше отказано.", "info");
-      }
+      showNotice(
+        "Ако не се отвори прозорец: отворете менюто на браузъра и изберете „Инсталиране на приложението“ или „Добави на началния екран“.",
+        "info"
+      );
     });
 
     window.addEventListener("appinstalled", function() {
-      showNotice("Little Achievers е добавен на началния екран.", "success");
+      showNotice("Little Achievers е добавен като приложение.", "success");
     });
   </script>
 
@@ -310,15 +333,21 @@
 
     const notifyBtn = document.getElementById("notifyBtn");
 
+    async function registerServiceWorker() {
+      if (!("serviceWorker" in navigator)) {
+        throw new Error("Service worker не се поддържа.");
+      }
+
+      return await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+    }
+
     notifyBtn.addEventListener("click", async function() {
       try {
+        notifyBtn.disabled = true;
+        notifyBtn.textContent = "Включва се...";
+
         if (!("Notification" in window)) {
           showNotice("Този браузър не поддържа известия.", "error");
-          return;
-        }
-
-        if (!("serviceWorker" in navigator)) {
-          showNotice("Този браузър не поддържа service worker известия.", "error");
           return;
         }
 
@@ -332,11 +361,11 @@
         const permission = await Notification.requestPermission();
 
         if (permission !== "granted") {
-          showNotice("Известията не са разрешени.", "error");
+          showNotice("Известията не са разрешени. Разрешете ги от настройките на браузъра.", "error");
           return;
         }
 
-        const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+        const registration = await registerServiceWorker();
 
         const messaging = getMessaging(app);
 
@@ -360,12 +389,21 @@
 
         localStorage.setItem("littleAchieversNotifications", "yes");
 
-        showNotice("Готово! Ще получавате известия на този телефон при ново записано дете.", "success");
+        showNotice("Готово! Ще получаваш известие при всяко ново записано дете.", "success");
       } catch (error) {
         console.error(error);
-        showNotice("Грешка при включване на известията. Провери Firebase Rules, service worker файла и браузъра.", "error");
+        showNotice("Грешка при включване на известията. Провери manifest.json, firebase-messaging-sw.js и Vercel Environment Variable.", "error");
+      } finally {
+        notifyBtn.disabled = false;
+        notifyBtn.textContent = "Разреши известия";
       }
     });
+
+    if ("serviceWorker" in navigator) {
+      registerServiceWorker().catch(function(error) {
+        console.log("Service worker още не е активен:", error);
+      });
+    }
   </script>
 
 </body>
